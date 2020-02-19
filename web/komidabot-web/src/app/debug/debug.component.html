@@ -1,0 +1,42 @@
+<div [style]="{'bg-light': !!getStateAsValid()}">
+  <div class="card bg-light" style="margin: 10px; height: calc(100% - 20px);">
+    <div class="card-body">
+      <p class="card-text">
+        Location: {{location}}
+      </p>
+      <p class="card-text">
+        Service Worker status: {{serviceWorkerStatus}}
+      </p>
+
+      <ng-container *ngIf="getStateAsValid() as state; else stateInvalid">
+        <p>App ID: {{state.appId}}</p>
+
+        <p>PSID: {{state.psid}}</p>
+
+        Features:
+        <ul>
+          <li *ngFor="let feature of state.features">{{feature}}</li>
+        </ul>
+      </ng-container>
+
+      <ng-template #stateInvalid>
+        <p *ngIf="getStateAsInvalid() as state; else stateLoading">
+          Invalid state: {{state | json}}
+        </p>
+      </ng-template>
+
+      <ng-template #stateLoading>
+        <ul>
+          <li>Loading data...</li>
+        </ul>
+      </ng-template>
+
+    </div>
+
+    <!--
+    <div class="card-footer text-right">
+      <button class="btn btn-primary" onClick="document.location.reload(true)">Reload page</button>
+    </div>
+    -->
+  </div>
+</div>
