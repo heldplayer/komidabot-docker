@@ -1,0 +1,5 @@
+{
+  "fb_appId": "1356185317877412",
+  "vapid_publicKey": "BEm-ZsuMHlkHY-_FCz1ezwa5npPV91wcEjRh5I8S7CJgY_CYxphPwoCI1mgCLv2WyNXOWVSTNf-zq4zuQeU--wc",
+  "subscriptions_endpoint": "/webhook-dev/subscription"
+}

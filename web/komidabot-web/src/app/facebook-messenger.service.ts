@@ -1,7 +1,6 @@
-import {Injectable, NgZone} from '@angular/core';
-import {combineLatest, Observable, ReplaySubject} from "rxjs";
-import {catchError, concatMap, debounceTime, map, share, tap} from "rxjs/operators";
-import {ActivatedRoute, ParamMap} from "@angular/router";
+import {Injectable, NgZone, OnDestroy} from '@angular/core';
+import {combineLatest, Observable, ReplaySubject, Subject} from "rxjs";
+import {catchError, concatMap, debounceTime, map, share, takeUntil, tap} from "rxjs/operators";
 import {
   FacebookMessengerAPI,
   MessengerAPIException,
@@ -10,6 +9,7 @@ import {
   MessengerStateValid,
   ThreadContext
 } from "../lib/facebook-messenger";
+import {AppConfigService} from "./app-config.service";
 
 interface SupportedFeatures {
   supported_features: string[];
@@ -95,45 +95,45 @@ declare var MessengerExtensions: FacebookMessengerSDK;
 @Injectable({
   providedIn: 'root'
 })
-export class FacebookMessengerService {
+export class FacebookMessengerService implements OnDestroy {
+  private unsubscribe$ = new Subject<void>();
 
   private readonly messengerApiSubject = new ReplaySubject<FacebookMessengerSDK>(1);
   private readonly messengerApi$ = this.messengerApiSubject.asObservable().pipe(
     debounceTime(10),
-    tap(x => console.log('Messenger API:', x))
-  );
-  private readonly appIdSubject = new ReplaySubject<string>(1);
-  private readonly appId$ = this.appIdSubject.asObservable().pipe(
-    debounceTime(100),
-    tap(x => console.log('App ID:', x))
+    // tap(x => console.log('Messenger API:', x)),
+    share()
   );
   private readonly apiSubject = new ReplaySubject<FacebookMessengerAPI>(1);
   private readonly api$ = this.apiSubject.asObservable().pipe(
     debounceTime(10),
-    tap(x => console.log('API Object:', x)),
+    // tap(x => console.log('API Object:', x)),
+    share()
+  );
+  private readonly apiStateSubject = new ReplaySubject<MessengerStateBase>(1);
+  private readonly apiState$ = this.apiStateSubject.asObservable().pipe(
+    debounceTime(10),
+    // tap(x => console.log('API State:', x)),
     share()
   );
 
-  private readonly apiState$: Observable<MessengerStateBase>;
+  private readonly appId$: Observable<string>;
 
   private scriptElement: HTMLScriptElement;
 
   constructor(
-    private route: ActivatedRoute,
+    private configService: AppConfigService,
     private zone: NgZone,
   ) {
     this.apiSubject.next(new FacebookMessengerAPIImpl(this.messengerApi$, this.zone));
 
-    this.route.queryParamMap.subscribe((value: ParamMap) => {
-      const isDev = value.has('dev') && value.get('dev') === 'true';
-      if (isDev) {
-        this.appIdSubject.next('1356185317877412');
-      } else {
-        this.appIdSubject.next('149768398970929');
-      }
-    });
+    this.appId$ = this.configService.config.pipe(
+      map((config) => config.fb_appId),
+      debounceTime(100),
+      tap(x => console.log('App ID:', x))
+    );
 
-    this.apiState$ = combineLatest(this.api$, this.appId$).pipe(
+    let subscription = combineLatest(this.api$, this.appId$).pipe(
       concatMap(apiData => {
         const api = <FacebookMessengerAPI>apiData[0];
         const appId = <string>apiData[1];
@@ -149,8 +149,14 @@ export class FacebookMessengerService {
       }),
       tap(x => console.log('API State:', x), e => console.log('API Object error:', (<Error>e).message)),
       catchError<MessengerStateBase, MessengerStateBase[]>(error => [new MessengerStateInvalid(error)]),
-      share()
-    );
+      share(),
+      takeUntil(this.unsubscribe$)
+    ).subscribe(state => this.apiStateSubject.next(state));
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   private ensureLoaded() {
@@ -158,7 +164,7 @@ export class FacebookMessengerService {
       return;
     }
 
-    console.info('Loading Facebook Messenger Service');
+    // console.info('Loading Facebook Messenger Service');
 
     (<any>window).extAsyncInit = () => {
       this.messengerApiSubject.next(MessengerExtensions);
@@ -168,7 +174,7 @@ export class FacebookMessengerService {
     this.scriptElement.src = '//connect.facebook.net/en_US/messenger.Extensions.js';
     document.head.append(this.scriptElement);
 
-    console.info('Injected API');
+    // console.info('Injected API');
   }
 
   public get state(): Observable<MessengerStateBase> {

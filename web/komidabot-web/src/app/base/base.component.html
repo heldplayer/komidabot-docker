@@ -1,0 +1,13 @@
+<div *ngIf="subscriptionState | async as state">
+  <br/><br/>
+  <ng-container *ngIf="state.subscribed; else unsubscribed">
+    <button class="btn btn-primary" (click)="unsubscribe()">
+      Unsubscribe
+    </button>
+  </ng-container>
+  <ng-template #unsubscribed>
+    <button [disabled]="!VAPID_PUBLIC_KEY" class="btn btn-primary" (click)="subscribeToNotifications()">
+      Subscribe
+    </button>
+  </ng-template>
+</div>

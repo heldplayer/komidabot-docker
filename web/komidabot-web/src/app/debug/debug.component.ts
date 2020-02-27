@@ -1,8 +1,9 @@
 import {ApplicationRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Subject} from "rxjs";
 import {MessengerStateBase, MessengerStateInvalid, MessengerStateValid} from "../../lib/facebook-messenger";
 import {FacebookMessengerService} from "../facebook-messenger.service";
 import {SwUpdate} from "@angular/service-worker";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-debug',
@@ -10,10 +11,10 @@ import {SwUpdate} from "@angular/service-worker";
   styleUrls: ['./debug.component.scss']
 })
 export class DebugComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
+
   title = 'komidabot-web';
   messengerState: MessengerStateBase;
-
-  private subscriptions: Subscription[] = [];
 
   constructor(
     private messengerService: FacebookMessengerService,
@@ -23,25 +24,27 @@ export class DebugComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    let subscription = this.messengerService.state.subscribe(
-      value => {
-        this.setMessengerState(value);
-      },
-      error => {
-        console.warn('Got error', error);
-        this.setMessengerState(new MessengerStateInvalid(error));
-      });
-    this.subscriptions.push(subscription);
+    let subscription = this.messengerService.state
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        value => {
+          this.setMessengerState(value);
+        },
+        error => {
+          console.warn('Got error', error);
+          this.setMessengerState(new MessengerStateInvalid(error));
+        });
 
     // subscription = this.updates.activated.subscribe();
 
-    // subscription = interval(1000).subscribe(() => this.changeDetector.markForCheck());
-    // this.subscriptions.push(subscription);
+    // subscription = interval(1000)
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe(() => this.changeDetector.markForCheck());
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    this.subscriptions = [];
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   get location(): string {
