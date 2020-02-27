@@ -27,12 +27,20 @@ export class SubscriptionService {
     // Do anything special?
   }
 
-  subscriptionCreated(data: PushSubscription): Observable<any> {
-    console.log('Created subscription:', data);
-    console.log(JSON.stringify(data.toJSON()));
+  subscriptionCreated(subscription: PushSubscription): Observable<any> {
+    console.log('Created subscription:', subscription);
+    console.log(JSON.stringify(subscription.toJSON()));
 
     return this.configService.config.pipe(
       concatMap(config => {
+        const subscriptionJson = subscription.toJSON();
+        const data = {
+          'subscription': {
+            'endpoint': subscriptionJson['endpoint'],
+            'keys': subscriptionJson['keys'],
+          }
+        };
+
         return this.http.post<any>(config.subscriptions_endpoint, data, httpOptions);
       })
     );
