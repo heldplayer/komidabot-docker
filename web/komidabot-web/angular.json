@@ -25,12 +25,24 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              "src/manifest.webmanifest"
+              {
+                "glob": "**/*",
+                "input": "src/assets/",
+                "output": "/assets/",
+                "ignore": [
+                  "*/apple-touch-*.png"
+                ]
+              },
+              "src/manifest.webmanifest",
+              {
+                "glob": "*/apple-touch-*.png",
+                "input": "src/assets/icons",
+                "output": "/"
+              }
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/font-awesome/css/font-awesome.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

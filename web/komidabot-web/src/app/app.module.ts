@@ -12,6 +12,10 @@ import {BaseComponent} from './base/base.component';
 import {ErrorPageComponent} from './error-page/error-page.component';
 import {AppConfigService} from "./app-config.service";
 import {HttpClientModule} from "@angular/common/http";
+import {MenuComponent} from './menu/menu.component';
+import {CampusComponent} from './campus/campus.component';
+import {DeviceDetectorModule} from "ngx-device-detector";
+import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 
 
 @NgModule({
@@ -21,12 +25,16 @@ import {HttpClientModule} from "@angular/common/http";
     DefaultComponent,
     BaseComponent,
     ErrorPageComponent,
+    MenuComponent,
+    CampusComponent,
+    SplashScreenComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production})
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+    DeviceDetectorModule.forRoot(),
   ],
   providers: [
     FacebookMessengerService,

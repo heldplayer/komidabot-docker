@@ -38,6 +38,7 @@ export class SubscriptionService {
           'subscription': {
             'endpoint': subscriptionJson['endpoint'],
             'keys': subscriptionJson['keys'],
+            'days': [3, 3, 3, 3, 3]
           }
         };
 

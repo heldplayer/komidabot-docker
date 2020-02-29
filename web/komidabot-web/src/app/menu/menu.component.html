@@ -1,0 +1,5 @@
+<ul *ngIf="menu">
+  <li *ngFor="let item of menu.items">
+    {{item.type}} {{item.description}} ({{item.price_students}} / {{item.price_staff}})
+  </li>
+</ul>

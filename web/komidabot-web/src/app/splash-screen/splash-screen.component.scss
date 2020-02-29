@@ -1,0 +1,62 @@
+@import '../../defs';
+
+:host {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.splash-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: $primary;
+  opacity: 1;
+
+  &.closing {
+    transition: opacity .4s ease;
+    opacity: 0;
+  }
+}
+
+.logo {
+  display: block;
+  position: absolute;
+  left: calc(50vw - 7.5vh);
+  top: 40.5vh;
+  width: 15vh;
+  height: 15vh;
+  transition: transform .4s ease;
+  /*
+   * Screen size: 1080x2280
+   * Status bar size: 1080x80
+   * Logo size: 336x336
+   * Square TL: (372x890)
+   * Square TR: (372x890)
+   * Square BL: (372x974)
+   * Square BR: (372x974)
+   */
+}
+
+.splash-container.loading .logo {
+  transform: scale(0, 0);
+}
+
+.spinner {
+  display: block;
+  position: absolute;
+  left: calc(50vw - 1em);
+  top: calc(48vh - 1em);
+  transition: transform .2s ease .3s;
+  transform: scale(0, 0);
+}
+
+.splash-container.loading .spinner {
+  transform: scale(1, 1);
+}
