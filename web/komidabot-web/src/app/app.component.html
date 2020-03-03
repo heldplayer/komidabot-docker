@@ -2,6 +2,12 @@
   <a class="navbar-brand" [routerLink]="['/']">Komidabot</a>
   <button class="btn btn-light" onClick="document.location.reload(true)">Reload page</button>
 </nav>
+<a *ngIf="updateAvailable"
+   class="d-block p-2 bg-warning text-center"
+   style="cursor: pointer;"
+   (click)="refreshPage()">
+  New version available, click here to refresh
+</a>
 <!--<div>{{deviceInfo | json}}</div>-->
 <router-outlet></router-outlet>
 <app-splash-screen *ngIf="displaySplash" (delete)="splashComplete()"></app-splash-screen>

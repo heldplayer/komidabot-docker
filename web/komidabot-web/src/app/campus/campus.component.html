@@ -1,31 +1,11 @@
 <ng-container *ngIf="display$ | async as display">
+  <app-days-display *ngIf="display.week_start as week_start"
+                    [campus]="display.campus"
+                    [weekStart]="week_start"></app-days-display>
 
-  <ng-container *ngIf="display.days as days; else dayDisplay">
-
-    <div class="card m-2 m-sm-3 m-md-4 m-lg-5" style="overflow: hidden;">
-      <div class="card-header p-0 d-flex justify-content-between align-items-center">
-        <a [routerLink]="['/campus', display.campus, 'w', dayForUrl(display.prev_week)]"
-           class="btn btn-outline-dark px-3 py-2" style="border: 0 none; border-radius: 0; box-shadow: none;">
-          <i class="fa fa-chevron-left"></i>
-        </a>
-        <span *ngIf="display.isThisWeek">This week</span>
-        <a [routerLink]="['/campus', display.campus, 'w', dayForUrl(display.next_week)]"
-           class="btn btn-outline-dark px-3 py-2" style="border: 0 none; border-radius: 0; box-shadow: none;">
-          <i class="fa fa-chevron-right"></i>
-        </a>
-      </div>
-      <div class="list-group list-group-flush">
-        <a *ngFor="let day of days"
-           [routerLink]="['/campus', display.campus, 'd', dayForUrl(day.day)]"
-           class="list-group-item">
-          {{dayForDisplay(day.day)}}
-        </a>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-template #dayDisplay>
-    <app-menu *ngIf="display.menu as menu" [menu]="menu"></app-menu>
-  </ng-template>
+  <app-menu-display *ngIf="display.menu as menu"
+                    [campus]="display.campus"
+                    [menu]="menu"
+                    [day]="display.menu_day"></app-menu-display>
 
 </ng-container>

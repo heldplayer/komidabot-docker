@@ -1,7 +1,7 @@
 @import 'node_modules/bootstrap/scss/functions';
 @import 'node_modules/bootstrap/scss/variables';
 
-.campus-item {
+.day-item {
   color: inherit;
 
   &:hover {
@@ -13,6 +13,6 @@
   }
 }
 
-.campus-subtitle {
+.day-subtitle {
   opacity: .6;
 }

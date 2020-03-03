@@ -59,7 +59,8 @@ export class CampusListComponent implements OnInit {
   getCampusSubscript(campusInfo: CampusInfo): string {
     if (this.isCampusClosed(campusInfo)) {
       // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
-      return campusInfo.closed_info?.reason['nl_BE'] || 'Closed';
+      console.log(campusInfo);
+      return campusInfo.closed_info?.reason['en_US'] || 'Closed';
       // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
     }
     // return 'Open from 11:45 to 13:45';

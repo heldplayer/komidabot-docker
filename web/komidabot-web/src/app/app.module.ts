@@ -11,7 +11,6 @@ import {environment} from '../environments/environment';
 import {ErrorPageComponent} from './error-page/error-page.component';
 import {AppConfigService} from "./app-config.service";
 import {HttpClientModule} from "@angular/common/http";
-import {MenuComponent} from './menu/menu.component';
 import {CampusComponent} from './campus/campus.component';
 import {DeviceDetectorModule} from "ngx-device-detector";
 import {SplashScreenComponent} from './splash-screen/splash-screen.component';
@@ -19,6 +18,8 @@ import {PwaStartComponent} from './pwa-start/pwa-start.component';
 import {CampusListComponent} from './campus-list/campus-list.component';
 import {SubscriptionButtonComponent} from './subscription-button/subscription-button.component';
 import {WebBaseComponent} from './web-base/web-base.component';
+import {DaysDisplayComponent} from './campus/days-display/days-display.component';
+import {MenuDisplayComponent} from "./campus/menu-display/menu-display.component";
 
 
 @NgModule({
@@ -27,13 +28,14 @@ import {WebBaseComponent} from './web-base/web-base.component';
     DebugComponent,
     DefaultComponent,
     ErrorPageComponent,
-    MenuComponent,
+    MenuDisplayComponent,
     CampusComponent,
     SplashScreenComponent,
     PwaStartComponent,
     CampusListComponent,
     SubscriptionButtonComponent,
     WebBaseComponent,
+    DaysDisplayComponent,
   ],
   imports: [
     BrowserModule,

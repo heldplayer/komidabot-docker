@@ -1,16 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CheckForUpdateService} from "./check-for-update.service";
 import {FacebookMessengerService} from "./facebook-messenger.service";
 import {DeviceDetectorService} from "ngx-device-detector";
+import {SwUpdate} from "@angular/service-worker";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-component',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
+
   deviceInfo: DeviceInfo;
   displaySplash: boolean;
+  updateAvailable = false;
 
   // noinspection JSUnusedLocalSymbols
   constructor(
@@ -18,8 +24,15 @@ export class AppComponent implements OnInit {
     // Add here to force starting this service
     private updateService: CheckForUpdateService,
     private messengerService: FacebookMessengerService,
+    private updates: SwUpdate,
   ) {
     this.displaySplash = window.location.pathname == '/pwa_start';
+
+    this.updates.available
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(_ => this.updateAvailable = true);
   }
 
   ngOnInit(): void {
@@ -50,6 +63,15 @@ export class AppComponent implements OnInit {
     }
 
     // this.displaySplash = true;
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  refreshPage() {
+    document.location.reload(true);
   }
 
   splashComplete() {

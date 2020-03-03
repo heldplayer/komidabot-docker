@@ -1,6 +1,0 @@
-<ul *ngIf="menu">
-  <li *ngFor="let item of menu.items">
-    <img [src]="getItemIconURL(item)"/>
-    {{item.type}} {{item.description}} ({{item.price_students}} / {{item.price_staff}})
-  </li>
-</ul>

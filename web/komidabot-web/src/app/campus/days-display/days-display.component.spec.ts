@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {MenuComponent} from './menu.component';
+import {DaysDisplayComponent} from './days-display.component';
 
-describe('MenuComponent', () => {
-  let component: MenuComponent;
-  let fixture: ComponentFixture<MenuComponent>;
+describe('DaysDisplayComponent', () => {
+  let component: DaysDisplayComponent;
+  let fixture: ComponentFixture<DaysDisplayComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MenuComponent]
+      declarations: [DaysDisplayComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuComponent);
+    fixture = TestBed.createComponent(DaysDisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

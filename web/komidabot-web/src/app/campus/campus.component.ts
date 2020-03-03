@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
-import {Menu} from "../types";
-import {switchMap} from "rxjs/operators";
+import {map, switchMap} from "rxjs/operators";
 import {Observable, of} from "rxjs";
 import * as moment from 'moment';
-import {ClosedDay, FoodType} from "../entities";
+import {Menu} from "../entities";
+import {CampusService} from "../campus.service";
 
 @Component({
   selector: 'app-campus',
@@ -16,6 +16,7 @@ export class CampusComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private campusService: CampusService,
   ) {
   }
 
@@ -25,136 +26,36 @@ export class CampusComponent implements OnInit {
         if ('date' in params) {
           const date = moment.utc(params['date']);
 
-          return of({
-            campus: params['campus'],
-            menu: {
-              day: date,
-              items: [
-                {
-                  type: FoodType.MEAT,
-                  description: 'Test meat',
-                  price_students: 'Tree fiddy'
-                },
-              ]
-            },
-          });
+          return this.campusService.getMenuForDay(params['campus'], date)
+            .pipe(
+              map(menu => ({
+                campus: params['campus'],
+                menu: <Menu>menu,
+                menu_day: date
+              }))
+            );
         }
 
         const now = moment.utc();
-        let week = now.startOf('week');
+        let week = now.startOf('isoWeek');
 
         if ('week' in params) {
-          week = moment.utc(params['week']).startOf('week');
+          week = moment.utc(params['week']).startOf('isoWeek');
         }
-
-        const nextWeek = week.clone().add(1, 'week');
-        const prevWeek = week.clone().subtract(1, 'week');
 
         return of({
           campus: params['campus'],
-          days: getDaysForWeek(week),
-          next_week: nextWeek,
-          prev_week: prevWeek,
-          isThisWeek: prevWeek < now && now < nextWeek
+          week_start: week
         });
       })
     );
   }
 
-  dayForUrl(day: moment.Moment): string {
-    return day.format('YYYY-MM-DD');
-  }
-
-  dayForDisplay(day: moment.Moment) {
-    let weekday: string;
-    let month: string;
-    switch (day.weekday()) {
-      case 0:
-        weekday = 'Maandag';
-        break;
-      case 1:
-        weekday = 'Dinsdag';
-        break;
-      case 2:
-        weekday = 'Woensdag';
-        break;
-      case 3:
-        weekday = 'Donderdag';
-        break;
-      case 4:
-        weekday = 'Vrijdag';
-        break;
-      default:
-        weekday = '???';
-    }
-    switch (day.month()) {
-      case 0:
-        month = 'Januari';
-        break;
-      case 1:
-        month = 'Februari';
-        break;
-      case 2:
-        month = 'Maart';
-        break;
-      case 3:
-        month = 'April';
-        break;
-      case 4:
-        month = 'Mei';
-        break;
-      case 5:
-        month = 'Juni';
-        break;
-      case 6:
-        month = 'Juli';
-        break;
-      case 7:
-        month = 'Augustus';
-        break;
-      case 8:
-        month = 'September';
-        break;
-      case 9:
-        month = 'October';
-        break;
-      case 10:
-        month = 'November';
-        break;
-      case 11:
-        month = 'December';
-        break;
-      default:
-        month = '???';
-    }
-    return `${weekday} ${day.date()} ${month}`
-  }
-}
-
-function getDaysForWeek(day: moment.Moment): WeekDay[] {
-  const weekStart = day.startOf('week');
-
-  const days = [];
-  for (let i = 0; i <= 4; i++) {
-    days.push({
-      day: weekStart.clone().add(i, 'days'),
-      closed: null
-    });
-  }
-
-  return days;
 }
 
 interface DisplayState {
   campus: string;
-  days?: WeekDay[];
   menu?: Menu;
-  next_week?: moment.Moment;
-  prev_week?: moment.Moment;
-  isThisWeek?: boolean;
-}
-
-interface WeekDay {
-  day: moment.Moment;
-  closed: ClosedDay | null;
+  menu_day?: moment.Moment;
+  week_start?: moment.Moment;
 }

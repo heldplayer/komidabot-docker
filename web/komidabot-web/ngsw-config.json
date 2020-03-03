@@ -49,7 +49,10 @@
         "strategy": "performance"
       },
       "urls": [
-        "/campus/*/closing_days",
+        "/campus/closing_days/*",
+        "/campus/closing_days/*/*",
+        "/campus/*/closing_days/*",
+        "/campus/*/closing_days/*/*",
         "/campus/*/menu/*"
       ]
     }
