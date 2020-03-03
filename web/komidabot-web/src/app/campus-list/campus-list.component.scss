@@ -1,0 +1,18 @@
+@import '../../../node_modules/bootstrap/scss/functions';
+@import '../../../node_modules/bootstrap/scss/variables';
+
+.campus-item {
+  color: inherit;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &.closed {
+    color: $danger;
+  }
+}
+
+.campus-subtitle {
+  opacity: .6;
+}

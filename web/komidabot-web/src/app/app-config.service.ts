@@ -35,6 +35,7 @@ export interface AppConfig {
   fb_appId: string;
   vapid_publicKey: string;
   subscriptions_endpoint: string;
+  api_endpoint: string;
 }
 
 function getQueryParams(): Map<string, string> {

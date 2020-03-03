@@ -1,0 +1,11 @@
+{
+  "/api": {
+    "target": "https://komidabot.heldplayer.blue:443",
+    "pathRewrite": {
+      "^/api": "/api-dev"
+    },
+    "changeOrigin": true,
+    "hostRewrite": true,
+    "autoRewrite": true
+  }
+}

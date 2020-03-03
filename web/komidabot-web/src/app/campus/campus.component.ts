@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
-import {Menu, MenuItemType} from "../types";
+import {Menu} from "../types";
 import {switchMap} from "rxjs/operators";
 import {Observable, of} from "rxjs";
 import * as moment from 'moment';
+import {ClosedDay, FoodType} from "../entities";
 
 @Component({
   selector: 'app-campus',
@@ -30,10 +31,10 @@ export class CampusComponent implements OnInit {
               day: date,
               items: [
                 {
-                  type: MenuItemType.MEAT,
+                  type: FoodType.MEAT,
                   description: 'Test meat',
                   price_students: 'Tree fiddy'
-                }
+                },
               ]
             },
           });
@@ -66,7 +67,7 @@ export class CampusComponent implements OnInit {
 
   dayForDisplay(day: moment.Moment) {
     let weekday: string;
-    let month = '';
+    let month: string;
     switch (day.weekday()) {
       case 0:
         weekday = 'Maandag';
@@ -130,12 +131,15 @@ export class CampusComponent implements OnInit {
   }
 }
 
-function getDaysForWeek(day: moment.Moment): moment.Moment[] {
+function getDaysForWeek(day: moment.Moment): WeekDay[] {
   const weekStart = day.startOf('week');
 
   const days = [];
   for (let i = 0; i <= 4; i++) {
-    days.push(weekStart.clone().add(i, 'days'));
+    days.push({
+      day: weekStart.clone().add(i, 'days'),
+      closed: null
+    });
   }
 
   return days;
@@ -143,9 +147,14 @@ function getDaysForWeek(day: moment.Moment): moment.Moment[] {
 
 interface DisplayState {
   campus: string;
-  days?: moment.Moment[];
+  days?: WeekDay[];
   menu?: Menu;
   next_week?: moment.Moment;
   prev_week?: moment.Moment;
   isThisWeek?: boolean;
+}
+
+interface WeekDay {
+  day: moment.Moment;
+  closed: ClosedDay | null;
 }

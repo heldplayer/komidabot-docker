@@ -2,7 +2,7 @@
 
   <ng-container *ngIf="display.days as days; else dayDisplay">
 
-    <div class="card days-list" style="overflow: hidden;">
+    <div class="card m-2 m-sm-3 m-md-4 m-lg-5" style="overflow: hidden;">
       <div class="card-header p-0 d-flex justify-content-between align-items-center">
         <a [routerLink]="['/campus', display.campus, 'w', dayForUrl(display.prev_week)]"
            class="btn btn-outline-dark px-3 py-2" style="border: 0 none; border-radius: 0; box-shadow: none;">
@@ -16,9 +16,9 @@
       </div>
       <div class="list-group list-group-flush">
         <a *ngFor="let day of days"
-           [routerLink]="['/campus', display.campus, 'd', dayForUrl(day)]"
+           [routerLink]="['/campus', display.campus, 'd', dayForUrl(day.day)]"
            class="list-group-item">
-          {{dayForDisplay(day)}}
+          {{dayForDisplay(day.day)}}
         </a>
       </div>
     </div>

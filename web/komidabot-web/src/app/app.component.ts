@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
     private updateService: CheckForUpdateService,
     private messengerService: FacebookMessengerService,
   ) {
+    this.displaySplash = window.location.pathname == '/pwa_start';
   }
 
   ngOnInit(): void {
@@ -40,7 +41,15 @@ export class AppComponent implements OnInit {
     };
     console.log(this.deviceService.getDeviceInfo());
 
-    this.displaySplash = true; //this.deviceInfo.is_mobile || this.deviceInfo.is_tablet
+    if (this.displaySplash) {
+      // Only display on devices we know this works on
+      if (this.deviceInfo.browser !== 'Chrome' || this.deviceInfo.os !== 'Android') {
+        this.displaySplash = false;
+      }
+      // this.displaySplash = this.deviceInfo.is_mobile || this.deviceInfo.is_tablet;
+    }
+
+    // this.displaySplash = true;
   }
 
   splashComplete() {

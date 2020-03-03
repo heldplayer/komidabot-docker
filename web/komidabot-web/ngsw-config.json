@@ -26,5 +26,32 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "non_changing",
+      "version": 1,
+      "cacheConfig": {
+        "maxSize": 10,
+        "maxAge": "1d",
+        "strategy": "performance"
+      },
+      "urls": [
+        "/campus"
+      ]
+    },
+    {
+      "name": "volatile",
+      "version": 1,
+      "cacheConfig": {
+        "maxSize": 50,
+        "maxAge": "1h",
+        "strategy": "performance"
+      },
+      "urls": [
+        "/campus/*/closing_days",
+        "/campus/*/menu/*"
+      ]
+    }
   ]
 }

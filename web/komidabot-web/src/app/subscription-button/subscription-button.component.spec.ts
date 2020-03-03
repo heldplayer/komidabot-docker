@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {MenuComponent} from './menu.component';
+import {SubscriptionButtonComponent} from './subscription-button.component';
 
-describe('MenuComponent', () => {
-  let component: MenuComponent;
-  let fixture: ComponentFixture<MenuComponent>;
+describe('SubscriptionButtonComponent', () => {
+  let component: SubscriptionButtonComponent;
+  let fixture: ComponentFixture<SubscriptionButtonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MenuComponent]
+      declarations: [SubscriptionButtonComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuComponent);
+    fixture = TestBed.createComponent(SubscriptionButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

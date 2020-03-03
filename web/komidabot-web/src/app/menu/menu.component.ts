@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Menu} from "../types";
+import {Menu, MenuItem} from "../types";
+import {FoodType, foodTypeIcons} from "../entities";
 
 @Component({
   selector: 'app-menu',
@@ -15,6 +16,10 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  getItemIconURL(item: MenuItem): string {
+    return `https://twemoji.maxcdn.com/v/latest/72x72/${foodTypeIcons[<FoodType>item.type]}.png`;
   }
 
 }

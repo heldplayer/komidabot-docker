@@ -1,0 +1,25 @@
+<div class="card m-2 m-sm-3 m-md-4 m-lg-5" style="margin-bottom: 0 !important;">
+  <div class="card-header">
+    Select campus
+  </div>
+  <div class="list-group list-group-flush" *ngIf="campusInfo$ | async as campuses; else loadingCampuses">
+    <a *ngFor="let campusInfo of campuses"
+       [routerLink]="['/campus', campusInfo.campus.short_name]"
+       class="list-group-item campus-item py-2 px-3"
+       [class.closed]="isCampusClosed(campusInfo)">
+      <span class="card-title d-block m-0">
+        <img *ngIf="isCampusClosed(campusInfo)"
+             src="https://twemoji.maxcdn.com/v/latest/72x72/274c.png"
+             class="emoji"/>
+
+        {{campusInfo.campus.name}}
+      </span>
+      <span class="card-subtitle d-block m-0 campus-subtitle">{{getCampusSubscript(campusInfo)}}</span>
+    </a>
+  </div>
+  <ng-template #loadingCampuses>
+    <div class="card-body">
+      Loading...
+    </div>
+  </ng-template>
+</div>

@@ -2,6 +2,6 @@
   <a class="navbar-brand" [routerLink]="['/']">Komidabot</a>
   <button class="btn btn-light" onClick="document.location.reload(true)">Reload page</button>
 </nav>
-{{deviceInfo | json}}
+<!--<div>{{deviceInfo | json}}</div>-->
 <router-outlet></router-outlet>
 <app-splash-screen *ngIf="displaySplash" (delete)="splashComplete()"></app-splash-screen>

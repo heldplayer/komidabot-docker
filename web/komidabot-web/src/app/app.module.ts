@@ -8,14 +8,17 @@ import {AppComponent} from "./app.component";
 import {DefaultComponent} from './default/default.component';
 import {ServiceWorkerModule} from "@angular/service-worker";
 import {environment} from '../environments/environment';
-import {BaseComponent} from './base/base.component';
 import {ErrorPageComponent} from './error-page/error-page.component';
 import {AppConfigService} from "./app-config.service";
 import {HttpClientModule} from "@angular/common/http";
 import {MenuComponent} from './menu/menu.component';
 import {CampusComponent} from './campus/campus.component';
 import {DeviceDetectorModule} from "ngx-device-detector";
-import { SplashScreenComponent } from './splash-screen/splash-screen.component';
+import {SplashScreenComponent} from './splash-screen/splash-screen.component';
+import {PwaStartComponent} from './pwa-start/pwa-start.component';
+import {CampusListComponent} from './campus-list/campus-list.component';
+import {SubscriptionButtonComponent} from './subscription-button/subscription-button.component';
+import {WebBaseComponent} from './web-base/web-base.component';
 
 
 @NgModule({
@@ -23,11 +26,14 @@ import { SplashScreenComponent } from './splash-screen/splash-screen.component';
     AppComponent,
     DebugComponent,
     DefaultComponent,
-    BaseComponent,
     ErrorPageComponent,
     MenuComponent,
     CampusComponent,
     SplashScreenComponent,
+    PwaStartComponent,
+    CampusListComponent,
+    SubscriptionButtonComponent,
+    WebBaseComponent,
   ],
   imports: [
     BrowserModule,

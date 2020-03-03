@@ -1,5 +1,4 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {take} from "rxjs/operators";
 import {timer} from "rxjs";
 
 @Component({
@@ -9,16 +8,21 @@ import {timer} from "rxjs";
 })
 export class SplashScreenComponent implements OnInit {
 
-  loading = false;
+  // loading = false;
   closing = false;
 
   constructor() {
   }
 
   ngOnInit(): void {
-    timer(100).pipe(
-      take(1)
-    ).subscribe(() => this.loading = true);
+    // timer(150) // Emits only once
+    //   .subscribe(() => this.loading = true);
+
+    // timer(1000) // Emits only once
+    //   .subscribe(() => this.closeSplash());
+
+    timer(150) // Emits only once
+      .subscribe(() => this.closeSplash());
   }
 
   @Output()
@@ -26,9 +30,8 @@ export class SplashScreenComponent implements OnInit {
 
   closeSplash() {
     this.closing = true;
-    timer(420).pipe(
-      take(1)
-    ).subscribe(() => this.delete.emit());
+    timer(420)  // Emits only once
+      .subscribe(() => this.delete.emit());
   }
 
 }

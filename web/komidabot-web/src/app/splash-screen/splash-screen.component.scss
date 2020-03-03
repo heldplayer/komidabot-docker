@@ -20,7 +20,7 @@
   opacity: 1;
 
   &.closing {
-    transition: opacity .4s ease;
+    transition: opacity .25s ease .1s;
     opacity: 0;
   }
 }
@@ -32,7 +32,8 @@
   top: 40.5vh;
   width: 15vh;
   height: 15vh;
-  transition: transform .4s ease;
+  transform: scale(1, 1);
+
   /*
    * Screen size: 1080x2280
    * Status bar size: 1080x80
@@ -45,6 +46,12 @@
 }
 
 .splash-container.loading .logo {
+  transition: transform .4s ease .1s;
+  transform: scale(0, 0);
+}
+
+.splash-container.closing .logo {
+  transition: transform .3s ease;
   transform: scale(0, 0);
 }
 
@@ -53,10 +60,10 @@
   position: absolute;
   left: calc(50vw - 1em);
   top: calc(48vh - 1em);
-  transition: transform .2s ease .3s;
   transform: scale(0, 0);
 }
 
 .splash-container.loading .spinner {
+  transition: transform .2s ease .4s;
   transform: scale(1, 1);
 }

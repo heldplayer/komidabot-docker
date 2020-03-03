@@ -5,19 +5,8 @@ export interface Menu {
   items: MenuItem[];
 }
 
-export enum MenuItemType {
-  SOUP = 1,
-  MEAT = 2,
-  VEGAN = 3,
-  GRILL = 4,
-  PASTA_MEAT = 5,
-  PASTA_VEGAN = 6,
-  SALAD = 7,
-  SUB = 8,
-}
-
 export interface MenuItem {
-  type: MenuItemType;
+  type: number;
   description: string;
   price_students: string;
   price_staff?: string;
