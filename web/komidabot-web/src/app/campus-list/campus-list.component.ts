@@ -64,7 +64,9 @@ export class CampusListComponent implements OnInit {
       // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
     }
     // return 'Open from 11:45 to 13:45';
-    return 'Open from Monday to Friday';
+    // return 'Open from Monday to Friday';
+    // TODO: Opening hours
+    return '';
   }
 }
 

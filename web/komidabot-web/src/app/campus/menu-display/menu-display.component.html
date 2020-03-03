@@ -8,7 +8,7 @@
        class="ml-2 mr-2 text-truncate" [routerLink]="['/campus', campus]">{{name}}</a>
     <span>/</span>
     <a *ngIf="dayForDisplay(day) as description"
-       class="ml-2 text-truncate" [routerLink]="['/campus', campus, 'd', dayForUrl(day)]">{{description}}</a>
+       class="ml-2 text-truncate">{{description}}</a>
   </div>
 
   <div class="list-group list-group-flush">

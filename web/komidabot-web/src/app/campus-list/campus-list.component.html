@@ -14,7 +14,10 @@
 
         {{campusInfo.campus.name}}
       </span>
-      <span class="card-subtitle d-block m-0 campus-subtitle">{{getCampusSubscript(campusInfo)}}</span>
+      <span *ngIf="getCampusSubscript(campusInfo) as subscript"
+            class="card-subtitle d-block m-0 campus-subtitle">
+        {{subscript}}
+      </span>
     </a>
   </div>
   <ng-template #loadingCampuses>

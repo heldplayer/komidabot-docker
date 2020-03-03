@@ -5,7 +5,7 @@
     <a class="ml-2 ml-md-3 mr-2" [routerLink]="['/']">Start</a>
     <span>/</span>
     <a *ngIf="getCampusName(campus) | async as name"
-       class="ml-2 text-truncate" [routerLink]="['/campus', campus]">{{name}}</a>
+       class="ml-2 text-truncate">{{name}}</a>
   </div>
 
   <div class="card-header p-0 d-flex justify-content-between align-items-center">

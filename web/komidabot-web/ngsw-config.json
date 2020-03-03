@@ -49,11 +49,16 @@
         "strategy": "performance"
       },
       "urls": [
-        "/campus/closing_days/*",
-        "/campus/closing_days/*/*",
-        "/campus/*/closing_days/*",
-        "/campus/*/closing_days/*/*",
-        "/campus/*/menu/*"
+        "/api/campus/closing_days/*",
+        "/api/campus/closing_days/*/*",
+        "/api/campus/*/closing_days/*",
+        "/api/campus/*/closing_days/*/*",
+        "/api/campus/*/menu/*",
+        "/api-dev/campus/closing_days/*",
+        "/api-dev/campus/closing_days/*/*",
+        "/api-dev/campus/*/closing_days/*",
+        "/api-dev/campus/*/closing_days/*/*",
+        "/api-dev/campus/*/menu/*"
       ]
     }
   ]
