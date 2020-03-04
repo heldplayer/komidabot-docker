@@ -3,10 +3,27 @@
   <!--  <button class="btn btn-light" onClick="document.location.reload(true)">Reload page</button>-->
   <div class="btn-group btn-group-toggle">
     <label class="btn btn-light" [class.active]="language === 'nl'">
-      <input type="radio" name="language" value="nl" (click)="setLanguage('nl')" [checked]="language === 'nl'"> NL
+      <input type="radio" name="language" value="nl" (click)="setLanguage('nl')" [checked]="language === 'nl'">
+      NL
+<!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+<!--           src="/assets/twemoji/1f1f3-1f1f1.png"/>-->
+<!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+<!--           src="/assets/twemoji/language-dutch.png"/>-->
     </label>
+<!--    <label class="btn btn-light" [class.active]="language === 'fr'">-->
+<!--      <input type="radio" name="language" value="en" (click)="setLanguage('fr')" [checked]="language === 'fr'">-->
+<!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+<!--           src="/assets/twemoji/1f1eb-1f1f7.png"/>-->
+<!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+<!--           src="/assets/twemoji/language-french.png"/>-->
+<!--    </label>-->
     <label class="btn btn-light" [class.active]="language === 'en'">
-      <input type="radio" name="language" value="en" (click)="setLanguage('en')" [checked]="language === 'en'"> EN
+      <input type="radio" name="language" value="en" (click)="setLanguage('en')" [checked]="language === 'en'">
+      EN
+<!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+<!--           src="/assets/twemoji/1f1ec-1f1e7.png"/>-->
+<!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+<!--           src="/assets/twemoji/language-english.png"/>-->
     </label>
   </div>
 </nav>
@@ -15,6 +32,12 @@
    style="cursor: pointer;"
    (click)="refreshPage()"
 >{{'APP.UPDATE_AVAILABLE' | translate}}</a>
+
+<div *ngIf="language === 'fr'"
+     class="alert alert-info mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-1 mt-md-4">
+  Let op. Frans is momenteel geen ondersteunde taal.
+</div>
+
 <!--<div>{{deviceInfo | json}}</div>-->
 <router-outlet></router-outlet>
 <app-splash-screen *ngIf="displaySplash" (delete)="splashComplete()"></app-splash-screen>

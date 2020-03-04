@@ -24,11 +24,14 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {registerLocaleData} from "@angular/common";
 import localeEn from '@angular/common/locales/en';
+import localeFr from '@angular/common/locales/fr';
 import localeNl from '@angular/common/locales/nl';
 import {LocalizedDatePipe} from './localized-date.pipe';
+import { ImageListComponent } from './image-list/image-list.component';
 
 
 registerLocaleData(localeEn, 'en');
+registerLocaleData(localeFr, 'fr');
 registerLocaleData(localeNl, 'nl');
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -50,6 +53,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     WebBaseComponent,
     DaysDisplayComponent,
     LocalizedDatePipe,
+    ImageListComponent,
   ],
   imports: [
     BrowserModule,
