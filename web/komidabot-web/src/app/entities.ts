@@ -45,10 +45,10 @@ export const enum FoodType {
 
 // TODO: Create custom icons?
 export const foodTypeIcons = {
-  [FoodType.SOUP]: '1f375',
-  [FoodType.MEAT]: '1f969',
-  [FoodType.VEGAN]: '1f96c',
-  [FoodType.GRILL]: '1f356',
+  [FoodType.SOUP]: '1f375-alt',
+  [FoodType.MEAT]: '1f32e',
+  [FoodType.VEGAN]: '1f966',
+  [FoodType.GRILL]: '1f969',
   [FoodType.PASTA_MEAT]: '1f35d',
   [FoodType.PASTA_VEGAN]: '1f35d-Dvegan-alt-alt-dark',
   [FoodType.SALAD]: '1f957',

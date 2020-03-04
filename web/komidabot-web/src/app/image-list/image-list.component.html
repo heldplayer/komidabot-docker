@@ -1,87 +1,11 @@
-<div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-1 mt-md-4" style="overflow: hidden;">
+<div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="overflow: hidden;">
   <div class="list-group list-group-flush">
-    <span class="list-group-item d-flex p-0 align-items-center">
+    <span *ngFor="let image of images"
+          class="list-group-item d-flex p-0 align-items-center">
       <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d.png"/>
+           [src]="image.url"/>
       <span class="item-name m-2 ml-0 mr-1">
-        Pasta original
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-vegan.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta original with upper V
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-Dvegan.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta original with lower V
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-Dvegan-dark.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta original with darker lower V
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-alt.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta green
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-vegan-alt.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta green with upper V
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-Dvegan-alt.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta green with lower V
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-Dvegan-alt-dark.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta green with darker lower V
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-alt-alt.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta greener
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-vegan-alt-alt.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta greener with upper V
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-Dvegan-alt-alt.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta greener with lower V
-      </span>
-    </span>
-    <span class="list-group-item d-flex p-0 align-items-center">
-      <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-           src="/assets/twemoji/1f35d-Dvegan-alt-alt-dark.png"/>
-      <span class="item-name m-2 ml-0 mr-1">
-        Pasta greener with darker lower V
+        {{image.description}}
       </span>
     </span>
   </div>
