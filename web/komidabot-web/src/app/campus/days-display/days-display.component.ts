@@ -110,7 +110,6 @@ export class DaysDisplayComponent implements OnInit {
   getDaySubscript(info: DayInfo): string {
     if (this.isCampusClosed(info)) {
       // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
-      console.log(info);
       if (this.translate.currentLang == 'nl') {
         // FIXME
         return info.closed?.reason['nl'] || 'Gesloten';

@@ -61,7 +61,7 @@ export class CampusService {
         const url = `${config.api_endpoint}campus/closing_days/${dayString}`;
         return this.http.get<ActiveClosingDays>(url, httpGetOptions)
           .pipe(
-            tap((result) => console.log(`getting all campuses w/ response=${JSON.stringify(result)}`))
+            tap((result) => console.log(`getting all campus closing days w/ response=${JSON.stringify(result)}`))
           );
       }),
       shareReplay(1)
@@ -112,7 +112,7 @@ export class CampusService {
           const url = `${config.api_endpoint}campus/${campus}/closing_days/${mondayString}/${fridayString}`;
           return this.http.get<ClosingDays>(url, httpGetOptions)
             .pipe(
-              tap((result) => console.log(`getting campus closing days w/ response=${JSON.stringify(result)}`))
+              tap((result) => console.log(`getting campus ${campus} closing days w/ response=${JSON.stringify(result)}`))
             );
         }),
         map((value: ClosingDays) => value.closing_days[campus]),
@@ -147,7 +147,7 @@ export class CampusService {
         const url = `${config.api_endpoint}campus/closing_days/${fromString}/${toString}`;
         return this.http.get<ClosingDays>(url, httpGetOptions)
           .pipe(
-            tap((result) => console.log(`getting campus closing days w/ response=${JSON.stringify(result)}`))
+            tap((result) => console.log(`getting all campus closing days w/ response=${JSON.stringify(result)}`))
           );
       })
     );
@@ -172,7 +172,7 @@ export class CampusService {
               tap((result) => console.log(`getting menu w/ response=${JSON.stringify(result)}`))
             );
         }),
-        tap(x => console.log('getWeekClosingDays request gives', x)),
+        tap(x => console.log('getMenuForDay request gives', x)),
         shareReplay(1),
       );
 
