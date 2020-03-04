@@ -24,7 +24,7 @@ export class CampusComponent implements OnInit {
     this.display$ = this.route.params.pipe(
       switchMap((params: Params) => {
         if ('date' in params) {
-          const date = moment.utc(params['date']);
+          const date = moment(params['date']);
 
           return this.campusService.getMenuForDay(params['campus'], date)
             .pipe(
@@ -36,11 +36,11 @@ export class CampusComponent implements OnInit {
             );
         }
 
-        const now = moment.utc();
+        const now = moment();
         let week = now.startOf('isoWeek');
 
         if ('week' in params) {
-          week = moment.utc(params['week']).startOf('isoWeek');
+          week = moment(params['week']).startOf('isoWeek');
         }
 
         return of({

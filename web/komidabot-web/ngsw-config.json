@@ -11,7 +11,8 @@
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
-          "/*.js"
+          "/*.js",
+          "/assets/i18n/**"
         ]
       }
     },
@@ -22,24 +23,13 @@
       "resources": {
         "files": [
           "/assets/**",
+          "!/assets/i18n/**",
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
     }
   ],
   "dataGroups": [
-    {
-      "name": "non_changing",
-      "version": 1,
-      "cacheConfig": {
-        "maxSize": 10,
-        "maxAge": "1d",
-        "strategy": "performance"
-      },
-      "urls": [
-        "/campus"
-      ]
-    },
     {
       "name": "volatile",
       "version": 1,
@@ -59,6 +49,18 @@
         "/api-dev/campus/*/closing_days/*",
         "/api-dev/campus/*/closing_days/*/*",
         "/api-dev/campus/*/menu/*"
+      ]
+    },
+    {
+      "name": "non_changing",
+      "version": 1,
+      "cacheConfig": {
+        "maxSize": 10,
+        "maxAge": "1d",
+        "strategy": "performance"
+      },
+      "urls": [
+        "/api/campus"
       ]
     }
   ]

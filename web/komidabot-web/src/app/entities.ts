@@ -43,6 +43,8 @@ export const enum FoodType {
   SUB = 8,
 }
 
+// TODO: Create custom icons?
+//       Especially for PASTA_VEGAN, maybe change the meat to green? :P
 export const foodTypeIcons = {
   [FoodType.SOUP]: '1f375',
   [FoodType.MEAT]: '1f969',

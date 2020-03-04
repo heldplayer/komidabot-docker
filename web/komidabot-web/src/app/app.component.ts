@@ -5,6 +5,7 @@ import {DeviceDetectorService} from "ngx-device-detector";
 import {SwUpdate} from "@angular/service-worker";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-component',
@@ -18,6 +19,8 @@ export class AppComponent implements OnInit, OnDestroy {
   displaySplash: boolean;
   updateAvailable = false;
 
+  language: string;
+
   // noinspection JSUnusedLocalSymbols
   constructor(
     private deviceService: DeviceDetectorService,
@@ -25,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private updateService: CheckForUpdateService,
     private messengerService: FacebookMessengerService,
     private updates: SwUpdate,
+    private translate: TranslateService,
   ) {
     this.displaySplash = window.location.pathname == '/pwa_start';
 
@@ -33,6 +37,11 @@ export class AppComponent implements OnInit, OnDestroy {
         takeUntil(this.unsubscribe$)
       )
       .subscribe(_ => this.updateAvailable = true);
+
+    this.language = localStorage.getItem('preferences.language') || 'nl';
+
+    this.translate.setDefaultLang('nl');
+    this.translate.use(this.language);
   }
 
   ngOnInit(): void {
@@ -76,6 +85,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   splashComplete() {
     this.displaySplash = false;
+  }
+
+  setLanguage(language: string) {
+    localStorage.setItem('preferences.language', language);
+    this.language = language;
+    this.translate.use(language);
   }
 }
 

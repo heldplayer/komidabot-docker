@@ -16,7 +16,7 @@
     </a>
 
     <div *ngIf="weekDescription as description">
-      {{description}}
+      {{description | translate}}
     </div>
 
     <a [routerLink]="['/campus', campus, 'w', dayForUrl(nextWeek)]"
@@ -33,9 +33,9 @@
        [class.closed]="isCampusClosed(info)">
       <span class="card-title d-block m-0">
         <img *ngIf="isCampusClosed(info)"
-             src="https://twemoji.maxcdn.com/v/latest/72x72/274c.png"
+             src="/assets/twemoji/274c.png"
              class="emoji"/>
-        {{dayForDisplay(info.day)}}
+        {{info.day.toDate() | localizedDate : true}}
       </span>
       <span *ngIf="getDaySubscript(info) as subscript"
             class="card-subtitle d-block m-0 day-subtitle">{{subscript}}</span>

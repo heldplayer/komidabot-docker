@@ -4,7 +4,8 @@ import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {CampusService} from "../../campus.service";
 import * as moment from "moment";
-import {dayToDisplay, dayToIso} from "../../utils";
+import {dayToDisplay} from "../../utils";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-menu-display',
@@ -22,8 +23,13 @@ export class MenuDisplayComponent implements OnInit {
   @Input()
   day: moment.Moment;
 
+  get language() {
+    return this.translate.currentLang;
+  }
+
   constructor(
     private campusService: CampusService,
+    private translate: TranslateService,
   ) {
   }
 
@@ -38,17 +44,22 @@ export class MenuDisplayComponent implements OnInit {
       );
   }
 
-  dayForUrl(day: moment.Moment): string {
-    return dayToIso(day);
-  }
-
   dayForDisplay(day: moment.Moment) {
     return dayToDisplay(day);
   }
 
   getIconURL(item: MenuItem): string {
-    // TODO: Store icons locally
-    return `https://twemoji.maxcdn.com/v/latest/72x72/${foodTypeIcons[<FoodType>item.food_type]}.png`;
+    return `/assets/twemoji/${foodTypeIcons[<FoodType>item.food_type]}.png`;
+  }
+
+  getTranslation(item: MenuItem): string {
+    if (this.translate.currentLang == 'nl') {
+      // FIXME
+      return item.translation['nl_BE'] || item.translation['nl_NL'] || '???';
+    } else {
+      // FIXME: English translations aren't available sometimes
+      return item.translation['en_US'] || item.translation['nl_BE'] || item.translation['nl_NL'];
+    }
   }
 
   getPriceDisplay(item: MenuItem): string {

@@ -10,7 +10,7 @@ import {ServiceWorkerModule} from "@angular/service-worker";
 import {environment} from '../environments/environment';
 import {ErrorPageComponent} from './error-page/error-page.component';
 import {AppConfigService} from "./app-config.service";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {CampusComponent} from './campus/campus.component';
 import {DeviceDetectorModule} from "ngx-device-detector";
 import {SplashScreenComponent} from './splash-screen/splash-screen.component';
@@ -20,7 +20,20 @@ import {SubscriptionButtonComponent} from './subscription-button/subscription-bu
 import {WebBaseComponent} from './web-base/web-base.component';
 import {DaysDisplayComponent} from './campus/days-display/days-display.component';
 import {MenuDisplayComponent} from "./campus/menu-display/menu-display.component";
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {registerLocaleData} from "@angular/common";
+import localeEn from '@angular/common/locales/en';
+import localeNl from '@angular/common/locales/nl';
+import {LocalizedDatePipe} from './localized-date.pipe';
 
+
+registerLocaleData(localeEn, 'en');
+registerLocaleData(localeNl, 'nl');
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -36,6 +49,7 @@ import {MenuDisplayComponent} from "./campus/menu-display/menu-display.component
     SubscriptionButtonComponent,
     WebBaseComponent,
     DaysDisplayComponent,
+    LocalizedDatePipe,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +57,14 @@ import {MenuDisplayComponent} from "./campus/menu-display/menu-display.component
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
     DeviceDetectorModule.forRoot(),
+    TranslateModule.forRoot({
+      defaultLanguage: 'nl',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
   providers: [
     FacebookMessengerService,

@@ -4,6 +4,7 @@ import {ActiveClosedDay, ActiveClosingDays, Campus} from "../entities";
 import {CampusService} from "../campus.service";
 import * as moment from "moment";
 import {map} from "rxjs/operators";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-campus-list',
@@ -19,10 +20,11 @@ export class CampusListComponent implements OnInit {
 
   constructor(
     private campusService: CampusService,
+    private translate: TranslateService,
   ) {
     this.campuses$ = this.campusService.getAllCampuses();
 
-    this.closingDays$ = this.campusService.getActiveClosingDays(moment.utc())
+    this.closingDays$ = this.campusService.getActiveClosingDays(moment())
       .pipe(
         map((value: ActiveClosingDays) => {
           const result = new Map<string, ActiveClosedDay>();
@@ -59,8 +61,12 @@ export class CampusListComponent implements OnInit {
   getCampusSubscript(campusInfo: CampusInfo): string {
     if (this.isCampusClosed(campusInfo)) {
       // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
-      console.log(campusInfo);
-      return campusInfo.closed_info?.reason['en_US'] || 'Closed';
+      if (this.translate.currentLang == 'nl') {
+        // FIXME
+        return campusInfo.closed_info?.reason['nl_BE'] || campusInfo.closed_info?.reason['nl_NL'] || 'Closed';
+      } else {
+        return campusInfo.closed_info?.reason['en_US'] || 'Closed';
+      }
       // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
     }
     // return 'Open from 11:45 to 13:45';

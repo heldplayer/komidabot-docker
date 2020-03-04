@@ -1,3 +1,8 @@
+<div *ngIf="language === 'en'"
+     class="alert alert-info mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-1 mt-md-4">
+  Please note, English menu translations are currently not working as expected.
+</div>
+
 <div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-1 mt-md-4" style="overflow: hidden;">
   <div class="card-header py-2 px-2 d-flex align-items-center"
        style="height: 2.5rem;">
@@ -7,8 +12,7 @@
     <a *ngIf="getCampusName(campus) | async as name"
        class="ml-2 mr-2 text-truncate" [routerLink]="['/campus', campus]">{{name}}</a>
     <span>/</span>
-    <a *ngIf="dayForDisplay(day) as description"
-       class="ml-2 text-truncate">{{description}}</a>
+    <a class="ml-2 text-truncate">{{day.toDate() | localizedDate : true}}</a>
   </div>
 
   <div class="list-group list-group-flush">
@@ -18,7 +22,7 @@
         <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
              [src]="getIconURL(item)"/>
         <span class="item-name m-2 ml-0 mr-1">
-          {{item.translation['nl_NL']}}
+          {{getTranslation(item)}}
         </span>
         <span class="item-price m-2 ml-auto">
           {{getPriceDisplay(item)}}
@@ -27,7 +31,7 @@
     </ng-container>
 
     <ng-template #noMenuItems>
-      <span class="list-group-item">No menu available for this day.</span>
+      <span class="list-group-item">{{'MENU.NO_AVAILABLE' | translate}}</span>
     </ng-template>
   </div>
 </div>

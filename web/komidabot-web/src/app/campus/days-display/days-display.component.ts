@@ -5,6 +5,7 @@ import {Observable, ReplaySubject} from "rxjs";
 import {map, startWith, switchMap} from "rxjs/operators";
 import {ClosedDay} from "../../entities";
 import {dayToDisplay, dayToIso} from "../../utils";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-days-display',
@@ -57,20 +58,20 @@ export class DaysDisplayComponent implements OnInit {
      *  S PPrev week  S Prev week   S This week   S Next week   S NNext week
      */
 
-    const now = moment.utc();
+    const now = moment();
 
     if (this.previousWeek <= now && now < this._weekStart) {
-      return 'Next week';
+      return 'WEEK.NEXT';
     }
 
     if (this._weekStart <= now && now < this.nextWeek) {
-      return 'This week';
+      return 'WEEK.CURRENT';
     }
 
     const nextNextWeek = this.nextWeek.clone().add(1, 'week');
 
     if (this.nextWeek <= now && now < nextNextWeek) {
-      return 'Last week';
+      return 'WEEK.PREVIOUS';
     }
 
     return '';
@@ -78,6 +79,7 @@ export class DaysDisplayComponent implements OnInit {
 
   constructor(
     private campusService: CampusService,
+    private translate: TranslateService,
   ) {
     this.days$ = this.weekStartSubject.asObservable()
       .pipe(
@@ -109,7 +111,12 @@ export class DaysDisplayComponent implements OnInit {
     if (this.isCampusClosed(info)) {
       // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
       console.log(info);
-      return info.closed?.reason['en_US'] || 'Closed';
+      if (this.translate.currentLang == 'nl') {
+        // FIXME
+        return info.closed?.reason['nl_BE'] || info.closed?.reason['nl_NL'] || 'Gesloten';
+      } else {
+        return info.closed?.reason['en_US'] || 'Closed';
+      }
       // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
     }
     // return 'Open from 11:45 to 13:45';
