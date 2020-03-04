@@ -113,9 +113,9 @@ export class DaysDisplayComponent implements OnInit {
       console.log(info);
       if (this.translate.currentLang == 'nl') {
         // FIXME
-        return info.closed?.reason['nl_BE'] || info.closed?.reason['nl_NL'] || 'Gesloten';
+        return info.closed?.reason['nl'] || 'Gesloten';
       } else {
-        return info.closed?.reason['en_US'] || 'Closed';
+        return info.closed?.reason['en'] || 'Closed';
       }
       // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
     }

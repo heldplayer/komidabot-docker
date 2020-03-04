@@ -55,10 +55,10 @@ export class MenuDisplayComponent implements OnInit {
   getTranslation(item: MenuItem): string {
     if (this.translate.currentLang == 'nl') {
       // FIXME
-      return item.translation['nl_BE'] || item.translation['nl_NL'] || '???';
+      return item.translation['nl'] || 'Missing translation';
     } else {
       // FIXME: English translations aren't available sometimes
-      return item.translation['en_US'] || item.translation['nl_BE'] || item.translation['nl_NL'];
+      return item.translation['en'] || item.translation['nl'] || 'Missing translation';
     }
   }
 

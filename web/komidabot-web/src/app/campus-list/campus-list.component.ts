@@ -63,9 +63,9 @@ export class CampusListComponent implements OnInit {
       // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
       if (this.translate.currentLang == 'nl') {
         // FIXME
-        return campusInfo.closed_info?.reason['nl_BE'] || campusInfo.closed_info?.reason['nl_NL'] || 'Closed';
+        return campusInfo.closed_info?.reason['nl'] || 'Gesloten';
       } else {
-        return campusInfo.closed_info?.reason['en_US'] || 'Closed';
+        return campusInfo.closed_info?.reason['en'] || 'Closed';
       }
       // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
     }
