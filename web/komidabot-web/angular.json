@@ -35,7 +35,7 @@
               },
               "src/manifest.webmanifest",
               {
-                "glob": "*/apple-touch-*.png",
+                "glob": "apple-touch-*.png",
                 "input": "src/assets/icons",
                 "output": "/"
               }
