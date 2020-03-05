@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ApiResponse, FoodType, foodTypeIcons, Menu, MenuItem} from "../../entities";
+import {ApiResponse, ClosedDay, FoodType, foodTypeIcons, Menu, MenuItem} from "../../entities";
 import {combineLatest, Observable, ReplaySubject} from "rxjs";
 import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
 import {CampusService} from "../../campus.service";
@@ -14,7 +14,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class MenuDisplayComponent {
 
-  menu$: Observable<ApiResponse<Menu>>;
+  menuInfo$: Observable<ApiResponse<MenuInfo>>;
   campusName$: Observable<string>;
 
   previousDay: moment.Moment;
@@ -61,15 +61,29 @@ export class MenuDisplayComponent {
   ) {
     // TODO: Check for closing day and display this here as well!
 
-    this.menu$ = combineLatest([this.campusSubject.asObservable(), this.daySubject.asObservable()])
+    this.menuInfo$ = combineLatest([this.campusSubject.asObservable(), this.daySubject.asObservable()])
       .pipe(
         distinctUntilChanged((p, n) => p[0] === n[0] && p[1].isSame(n[1], 'day')),
         switchMap(data => {
           const campus: string = data[0];
           const day: moment.Moment = data[1];
 
-          return this.campusService.getMenuForDay(campus, day);
-        })
+          return ApiResponse.combineLatest([
+            this.campusService.getMenuForDay(campus, day),
+            this.campusService.getCampusClosed(day, campus)
+          ]);
+        }),
+        ApiResponse.pipe(
+          map(data => {
+            const menu: Menu = data[0];
+            const closed: ClosedDay | null = data[1];
+
+            return {
+              menu: menu,
+              closed: closed
+            };
+          })
+        )
       );
 
     this.campusName$ = this.campusSubject.asObservable()
@@ -112,4 +126,26 @@ export class MenuDisplayComponent {
       return '';
     }
   }
+
+  getClosedDisplay(menuInfo: MenuInfo): string {
+    if (menuInfo.closed) {
+      // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
+      if (this.translate.currentLang == 'nl') {
+        // FIXME
+        return menuInfo.closed.reason['nl'] || 'Gesloten';
+      } else {
+        return menuInfo.closed.reason['en'] || 'Closed';
+      }
+      // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
+    }
+    // return 'Open from 11:45 to 13:45';
+    // return 'Open from Monday to Friday';
+    // TODO: Opening hours
+    return '';
+  }
+}
+
+interface MenuInfo {
+  menu: Menu;
+  closed: ClosedDay | null;
 }

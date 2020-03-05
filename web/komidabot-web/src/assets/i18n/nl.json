@@ -3,6 +3,7 @@
   "CAMPUS_LIST.ERROR": "Fout bij het laden van de lijst met restaurants.",
   "CAMPUS_LIST.LOADING": "Aan het laden...",
   "CAMPUS_LIST.HEADER": "Selecteer een campus",
+  "CAMPUS_LIST.TODAY": "Vandaag",
   "MENU.ERROR": "Fout bij het laden van het menu.",
   "MENU.LOADING": "Aan het laden...",
   "MENU.EMPTY": "Geen menu beschikbaar voor deze dag.",

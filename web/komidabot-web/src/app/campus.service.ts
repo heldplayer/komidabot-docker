@@ -83,7 +83,7 @@ export class CampusService {
    * @return An observable detailing which days are open and which are closed for a week.
    */
   getWeekClosingDays(day: moment.Moment, campus: string): Observable<ApiResponse<(ClosedDay | null)[]>> {
-    const monday = day.startOf('isoWeek'); // Monday
+    const monday = day.clone().startOf('isoWeek'); // Monday
     const friday = day.clone().add(4, 'days'); // Friday
 
     const mondayString = monday.format('YYYY-MM-DD');
@@ -142,6 +142,16 @@ export class CampusService {
       .pipe(
         // tap(x => console.log('getWeekClosingDays gives', x)),
       );
+  }
+
+  getCampusClosed(day: moment.Moment, campus: string): Observable<ApiResponse<ClosedDay | null>> {
+    this.getWeekClosingDays(day, campus);
+
+    const dayString = day.format('YYYY-MM-DD');
+
+    const campusCache = this.closedDaysCache.get(campus);
+
+    return campusCache?.get(dayString) as Observable<ApiResponse<ClosedDay | null>>;
   }
 
   getMenuForDay(campus: string, day: moment.Moment): Observable<ApiResponse<Menu>> {

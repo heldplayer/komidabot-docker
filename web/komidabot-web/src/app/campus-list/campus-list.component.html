@@ -1,12 +1,15 @@
 <div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="margin-bottom: 0 !important;">
   <!-- Header -->
-  <div class="card-header">{{'CAMPUS_LIST.HEADER' | translate}}</div>
+  <div class="card-header d-flex align-items-center pr-2">
+    <span class="mr-auto">{{'CAMPUS_LIST.HEADER' | translate}}</span>
+    <span>{{'CAMPUS_LIST.TODAY' | translate}}</span>
+  </div>
 
   <!-- Body -->
   <ng-container *ngIf="campusInfo$ | async as campusInfo; else loadingCampuses">
     <ng-container *ngIf="campusInfo.isLoaded; else errorLoading">
       <div class="list-group list-group-flush">
-        <div *ngFor="let campusInfo of campusInfo.response"
+        <div *ngFor="let campusInfo of campusInfo.response; let even = even; let odd = odd"
              class="list-group-item d-flex p-0 align-items-center">
           <a [routerLink]="['/campus', campusInfo.campus.short_name]"
              class="campus-item py-2 px-3 flex-grow-1"
@@ -33,11 +36,16 @@
             </span>
             </ng-template>
           </a>
-          <a *ngIf="!isCampusClosed(campusInfo)"
-             class="border-left align-self-stretch align-items-center d-flex"
+<!--          <a *ngIf="!isCampusClosed(campusInfo)"-->
+<!--             class="border-left align-self-stretch align-items-center d-flex"-->
+<!--             style="line-height: 100%;"-->
+<!--             [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]">-->
+<!--            <span class="py-2 px-3">{{'CAMPUS_LIST.TODAY' | translate}}</span>-->
+<!--          </a>-->
+          <a class="border-left align-self-stretch align-items-center d-flex"
              style="line-height: 100%;"
              [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]">
-            <span class="py-2 px-3">Today</span>
+            <img class="mx-3 my-2 flex-shrink-0" style="width: 2em; height: 2em;" src="/assets/twemoji/23e9.png"/>
           </a>
         </div>
       </div>

@@ -3,6 +3,7 @@
   "CAMPUS_LIST.ERROR": "Error loading the list of restaurants.",
   "CAMPUS_LIST.LOADING": "Loading...",
   "CAMPUS_LIST.HEADER": "Select a campus",
+  "CAMPUS_LIST.TODAY": "Today",
   "MENU.ERROR": "Error loading the menu.",
   "MENU.LOADING": "Loading...",
   "MENU.EMPTY": "No menu available for this day.",

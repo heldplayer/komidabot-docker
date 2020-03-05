@@ -32,29 +32,37 @@
   </div>
 
   <!-- Body -->
-  <ng-container *ngIf="menu$ | async as menu; else loadingMenu">
-    <ng-container *ngIf="menu.isLoaded; else errorLoading">
-      <div class="list-group list-group-flush" *ngIf="menu.response.menu.length > 0; else noMenuItems">
-        <span *ngFor="let item of menu.response.menu"
-              class="list-group-item d-flex p-0 align-items-center">
-          <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
-               [src]="getIconURL(item)"/>
-          <span class="item-name m-2 ml-0 mr-1">
-            {{getTranslation(item)}}
-          </span>
-          <span class="item-price m-2 ml-auto">
-            {{getPriceDisplay(item)}}
-          </span>
-        </span>
-
+  <ng-container *ngIf="menuInfo$ | async as menuInfo; else loadingMenu">
+    <ng-container *ngIf="menuInfo.isLoaded; else errorLoading">
+      <div *ngIf="getClosedDisplay(menuInfo.response) as closedText; else notClosed"
+           class="card-body">
+        {{closedText}}
       </div>
+
+      <ng-template #notClosed>
+        <div class="list-group list-group-flush" *ngIf="menuInfo.response.menu.menu.length > 0; else noMenuItems">
+          <span *ngFor="let item of menuInfo.response.menu.menu"
+                class="list-group-item d-flex p-0 align-items-center">
+            <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
+                 [src]="getIconURL(item)"/>
+            <span class="item-name m-2 ml-0 mr-1">
+              {{getTranslation(item)}}
+            </span>
+            <span class="item-price m-2 ml-auto">
+              {{getPriceDisplay(item)}}
+            </span>
+          </span>
+        </div>
+      </ng-template>
+
+
       <ng-template #noMenuItems>
         <div class="card-body">{{'MENU.EMPTY' | translate}}</div>
       </ng-template>
     </ng-container>
 
     <ng-template #errorLoading>
-      <ng-container *ngIf="menu.isErrored; else loadingMenu">
+      <ng-container *ngIf="menuInfo.isErrored; else loadingMenu">
         <div class="card-body">{{'MENU.ERROR' | translate}}</div>
       </ng-container>
     </ng-template>
