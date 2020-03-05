@@ -9,7 +9,9 @@ export class AppConfigService {
 
   private appConfig = new ReplaySubject<AppConfig>(1);
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+  ) {
   }
 
   loadAppConfig(): Promise<any> {
@@ -18,11 +20,12 @@ export class AppConfigService {
 
     const configLocation = isDev ? '/assets/config-dev.json' : '/assets/config.json';
 
-    return this.http.get(configLocation)
+    return this.http.get<AppConfig>(configLocation)
       .toPromise()
       .then((data: any) => {
         console.log('App config:', data);
-        this.appConfig.next(<AppConfig>data)
+        this.appConfig.next(data);
+        this.appConfig.complete();
       });
   }
 

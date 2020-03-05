@@ -1,10 +1,20 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ActiveClosingDays, ApiResponse, Campus, CampusList, ClosedDay, ClosingDays, Menu} from "./entities";
+import {
+  ApiResponse,
+  Campus,
+  CampusListResponse,
+  ClosingDay,
+  ClosingDays,
+  ClosingDaysResponse, DayClosings,
+  MenuItem,
+  MenuResponse
+} from "./entities";
 import {AppConfigService} from "./app-config.service";
-import {concatMap, map, shareReplay, tap} from "rxjs/operators";
+import {concatMap, debounceTime, map, pluck, shareReplay, switchMap, tap} from "rxjs/operators";
 import * as moment from 'moment';
+import {unsafeCast} from "./utils";
 
 const httpGetOptions = {
   headers: new HttpHeaders({
@@ -17,9 +27,9 @@ const httpGetOptions = {
 })
 export class CampusService {
   private campuses$: Observable<ApiResponse<Campus[]>>;
-  private activeClosingDaysCache = new Map<string, Observable<ApiResponse<ActiveClosingDays>>>(); // Day -> closed campuses
-  private closedDaysCache = new Map<string, Map<string, Observable<ApiResponse<ClosedDay | null>>>>(); // campus -> day -> closed
-  private menuCache = new Map<string, Map<string, Observable<ApiResponse<Menu>>>>(); // campus -> day -> menu
+  private menuCache = new Map<string, Map<string, Observable<ApiResponse<MenuItem[]>>>>(); // campus -> day -> menu
+  private closedDaysRequestCache = new Map<string, Observable<ApiResponse<ClosingDaysResponse>>>(); // day -> response
+  private closedDaysCache = new Map<string, Map<string, Observable<ApiResponse<ClosingDay | null>>>>(); // campus -> day -> closed
 
   constructor(
     private configService: AppConfigService,
@@ -28,12 +38,11 @@ export class CampusService {
 
     this.campuses$ = this.configService.config.pipe(
       concatMap(config => {
-        return this.http.get<CampusList>(`${config.api_endpoint}campus`, httpGetOptions)
+        return this.http.get<CampusListResponse>(`${config.api_endpoint}campus`, httpGetOptions)
           .pipe(
             tap((result) => console.log('getting all campuses w/ response =', result))
           );
       }),
-      map((value: CampusList) => value.campuses),
       ApiResponse.convert<Campus[]>(),
       shareReplay(1),
     );
@@ -51,27 +60,64 @@ export class CampusService {
     );
   }
 
-  getActiveClosingDays(day: moment.Moment): Observable<ApiResponse<ActiveClosingDays>> {
-    const dayString = day.format('YYYY-MM-DD');
+  /**
+   * Gets information about closings for a week.
+   * @param day A day of the week.
+   * @return An observable detailing which days are open and which are closed for a week.
+   */
+  getAllWeekClosingDays(day: moment.Moment): Observable<ApiResponse<ClosingDaysResponse>> {
+    const monday = day.clone().startOf('isoWeek'); // Monday
+    const mondayString = monday.format('YYYY-MM-DD');
 
-    let cachedValue = this.activeClosingDaysCache.get(dayString);
-    if (cachedValue !== undefined) {
+    let cachedValue = this.closedDaysRequestCache.get(mondayString);
+    if (cachedValue) {
       return cachedValue;
     }
 
-    cachedValue = this.configService.config.pipe(
-      concatMap(config => {
-        const url = `${config.api_endpoint}campus/closing_days/${dayString}`;
-        return this.http.get<ActiveClosingDays>(url, httpGetOptions)
-          .pipe(
-            tap((result) => console.log('getting all campus closing days w/ response =', result))
-          );
+    cachedValue = this.campuses$.pipe(
+      ApiResponse.awaitReady(),
+      switchMap((campuses: Campus[]) => {
+
+        const data = this.configService.config.pipe(
+          concatMap(config => {
+            const url = `${config.api_endpoint}campus/closing_days/${mondayString}`;
+            return this.http.get<ClosingDaysResponse>(url, httpGetOptions)
+              .pipe(
+                tap((result) => console.log(`getting all campus closing days w/ response =`, result)),
+              );
+          }),
+          // tap(x => console.log('getWeekClosingDays request gives', x)),
+          ApiResponse.convert<ClosingDaysResponse>(),
+          shareReplay(1),
+        );
+
+        campuses.forEach(campus => {
+          const shortName = campus.short_name;
+          let campusCache = this.closedDaysCache.get(shortName);
+          if (!campusCache) {
+            campusCache = new Map<string, Observable<ApiResponse<ClosingDay | null>>>();
+            this.closedDaysCache.set(shortName, campusCache);
+          }
+
+          for (let i = 0; i <= 4; i++) {
+            const day = monday.clone().add(i, 'days');
+            const dayString = day.format('YYYY-MM-DD');
+            const observable = data.pipe(
+              ApiResponse.pipe(
+                map((closingDays) => closingDays[shortName]),
+                map((closingDays) => closingDays[i]),
+              )
+            );
+            campusCache.set(dayString, observable);
+          }
+        });
+
+        return data;
       }),
-      ApiResponse.convert<ActiveClosingDays>(),
       shareReplay(1),
     );
 
-    this.activeClosingDaysCache.set(dayString, cachedValue);
+    this.closedDaysRequestCache.set(mondayString, cachedValue);
 
     return cachedValue;
   }
@@ -82,20 +128,17 @@ export class CampusService {
    * @param campus The campus to query.
    * @return An observable detailing which days are open and which are closed for a week.
    */
-  getWeekClosingDays(day: moment.Moment, campus: string): Observable<ApiResponse<(ClosedDay | null)[]>> {
+  getWeekClosingDays(day: moment.Moment, campus: string): Observable<ApiResponse<ClosingDays>> {
     const monday = day.clone().startOf('isoWeek'); // Monday
-    const friday = day.clone().add(4, 'days'); // Friday
-
     const mondayString = monday.format('YYYY-MM-DD');
-    const fridayString = friday.format('YYYY-MM-DD');
 
     let campusCache = this.closedDaysCache.get(campus);
     if (!campusCache) {
-      campusCache = new Map<string, Observable<ApiResponse<ClosedDay | null>>>();
+      campusCache = new Map<string, Observable<ApiResponse<ClosingDay | null>>>();
       this.closedDaysCache.set(campus, campusCache);
     }
 
-    let observables: Observable<ApiResponse<ClosedDay | null>>[] = [];
+    let observables: Observable<ApiResponse<ClosingDay | null>>[] = [];
 
     for (let i = 0; i <= 4; i++) {
       const day = monday.clone().add(i, 'days');
@@ -113,15 +156,15 @@ export class CampusService {
 
       const data = this.configService.config.pipe(
         concatMap(config => {
-          const url = `${config.api_endpoint}campus/${campus}/closing_days/${mondayString}/${fridayString}`;
-          return this.http.get<ClosingDays>(url, httpGetOptions)
+          const url = `${config.api_endpoint}campus/${campus}/closing_days/${mondayString}`;
+          return this.http.get<ClosingDaysResponse>(url, httpGetOptions)
             .pipe(
               tap((result) => console.log(`getting campus ${campus} closing days w/ response =`, result)),
             );
         }),
-        map((value: ClosingDays) => value.closing_days[campus]),
+        map((value: ClosingDaysResponse) => value[campus] || [null, null, null, null, null]),
         // tap(x => console.log('getWeekClosingDays request gives', x)),
-        ApiResponse.convert<ClosedDay[]>(),
+        ApiResponse.convert<ClosingDays>(),
         shareReplay(1),
       );
 
@@ -130,7 +173,7 @@ export class CampusService {
         const dayString = day.format('YYYY-MM-DD');
         const observable = data.pipe(
           ApiResponse.pipe(
-            map((value: ClosedDay[]) => value.find(value1 => value1.date === dayString) || null),
+            pluck(i)
           )
         );
         campusCache.set(dayString, observable);
@@ -140,26 +183,44 @@ export class CampusService {
 
     return ApiResponse.combineLatest(observables)
       .pipe(
+        unsafeCast(),
         // tap(x => console.log('getWeekClosingDays gives', x)),
       );
   }
 
-  getCampusClosed(day: moment.Moment, campus: string): Observable<ApiResponse<ClosedDay | null>> {
+  getClosedCampuses(day: moment.Moment): Observable<ApiResponse<DayClosings>> {
+    return this.getAllWeekClosingDays(day)
+      .pipe(
+        ApiResponse.pipe(
+          map((closingDays) => {
+            const result = new Map<string, ClosingDay | null>();
+
+            Object.keys(closingDays).forEach(campus => {
+              result.set(campus, closingDays[campus][day.isoWeekday() - 1]);
+            });
+
+            return result;
+          }),
+        )
+      );
+  }
+
+  getCampusClosed(day: moment.Moment, campus: string): Observable<ApiResponse<ClosingDay | null>> {
     this.getWeekClosingDays(day, campus);
 
     const dayString = day.format('YYYY-MM-DD');
 
     const campusCache = this.closedDaysCache.get(campus);
 
-    return campusCache?.get(dayString) as Observable<ApiResponse<ClosedDay | null>>;
+    return campusCache?.get(dayString) as Observable<ApiResponse<ClosingDay | null>>;
   }
 
-  getMenuForDay(campus: string, day: moment.Moment): Observable<ApiResponse<Menu>> {
+  getMenuForDay(day: moment.Moment, campus: string): Observable<ApiResponse<MenuItem[]>> {
     const dayString = day.format('YYYY-MM-DD');
 
     let campusCache = this.menuCache.get(campus);
     if (!campusCache) {
-      campusCache = new Map<string, Observable<ApiResponse<Menu>>>();
+      campusCache = new Map<string, Observable<ApiResponse<MenuItem[]>>>();
       this.menuCache.set(campus, campusCache);
     }
 
@@ -168,13 +229,13 @@ export class CampusService {
       observable = this.configService.config.pipe(
         concatMap(config => {
           const url = `${config.api_endpoint}campus/${campus}/menu/${dayString}`;
-          return this.http.get<Menu>(url, httpGetOptions)
+          return this.http.get<MenuResponse>(url, httpGetOptions)
             .pipe(
               tap((result) => console.log('getting menu w/ response =', result))
             );
         }),
         // tap(x => console.log('getMenuForDay request gives', x)),
-        ApiResponse.convert<Menu>(),
+        ApiResponse.convert<MenuItem[]>(),
         shareReplay(1)
       );
 

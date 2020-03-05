@@ -24,11 +24,18 @@
 
     <span class="ml-2 text-truncate">{{day.toDate() | localizedDate : true}}</span>
 
-    <a [routerLink]="['/campus', campus, 'd', dayForUrl(nextDay)]"
+    <a *ngIf="nextDay !== null; else disabledNextDay"
+       [routerLink]="['/campus', campus, 'd', dayForUrl(nextDay)]"
        class="btn btn-outline-dark px-3 py-2"
        style="border: 0 none; border-radius: 0; box-shadow: none;">
       <i class="fa fa-chevron-right"></i>
     </a>
+    <ng-template #disabledNextDay>
+      <span class="btn btn-outline-dark disabled px-3 py-2"
+            style="border: 0 none; border-radius: 0; box-shadow: none;">
+        <i class="fa fa-chevron-right"></i>
+      </span>
+    </ng-template>
   </div>
 
   <!-- Body -->
@@ -40,8 +47,16 @@
       </div>
 
       <ng-template #notClosed>
-        <div class="list-group list-group-flush" *ngIf="menuInfo.response.menu.menu.length > 0; else noMenuItems">
-          <span *ngFor="let item of menuInfo.response.menu.menu"
+        <div class="list-group list-group-flush" *ngIf="menuInfo.response.menu.length > 0; else noMenuItems">
+          <span *ngIf="isMenuProvisional"
+                class="list-group-item d-flex p-0 align-items-center">
+            <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
+                 src="/assets/twemoji/26a0.png"/>
+            <span class="item-name m-2 ml-0 mr-1">
+              {{'MENU.PROVISIONAL' | translate}}
+            </span>
+          </span>
+          <span *ngFor="let item of menuInfo.response.menu"
                 class="list-group-item d-flex p-0 align-items-center">
             <img class="ml-3 mr-1 my-2 flex-shrink-0" style="width: 2em; height: 2em;"
                  [src]="getIconURL(item)"/>

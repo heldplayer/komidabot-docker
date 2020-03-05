@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {Observable} from "rxjs";
-import {ActiveClosedDay, ActiveClosingDays, ApiResponse, Campus} from "../entities";
+import {ApiResponse, Campus, ClosingDay, DayClosings, ResponseState} from "../entities";
 import {CampusService} from "../campus.service";
 import * as moment from "moment";
-import {map} from "rxjs/operators";
+import {map, shareReplay, startWith, tap} from "rxjs/operators";
 import {TranslateService} from "@ngx-translate/core";
-import {dayToIso} from "../utils";
+import {dayToIso, getClosedDisplay} from "../utils";
 
 @Component({
   selector: 'app-campus-list',
@@ -15,7 +15,7 @@ import {dayToIso} from "../utils";
 export class CampusListComponent {
 
   campuses$: Observable<ApiResponse<Campus[]>>;
-  closingDays$: Observable<ApiResponse<Map<string, ActiveClosedDay>>>;
+  closingDays$: Observable<ApiResponse<DayClosings>>;
 
   campusInfo$: Observable<ApiResponse<CampusInfo[]>>;
 
@@ -25,34 +25,29 @@ export class CampusListComponent {
   ) {
     this.campuses$ = this.campusService.getAllCampuses();
 
-    this.closingDays$ = this.campusService.getActiveClosingDays(moment())
+    this.closingDays$ = this.campusService.getClosedCampuses(moment())
       .pipe(
-        ApiResponse.pipe(
-          map((value: ActiveClosingDays) => {
-            const result = new Map<string, ActiveClosedDay>();
-
-            for (const campus in value.closing_days) {
-              result.set(campus, value.closing_days[campus]);
-            }
-
-            return result;
-          })
-        ),
+        ApiResponse.startWith(new Map())
       );
 
-    this.campusInfo$ = ApiResponse.combineLatest([this.campuses$, this.closingDays$])
+    this.campusInfo$ = ApiResponse.combineLatest([
+      this.campuses$,
+      this.closingDays$
+    ])
       .pipe(
+        tap(value => console.log('Campus list data:', value)),
         ApiResponse.pipe(
           map(data => {
             const campuses = <Campus[]>data[0];
-            const closingDays = <Map<string, ActiveClosedDay>>data[1];
+            const closingDays = <DayClosings>data[1];
 
             return campuses.map(value => ({
               campus: value,
-              closed_info: closingDays.get(value.short_name),
+              closed_info: closingDays.get(value.short_name) || null,
             }));
           })
-        )
+        ),
+        shareReplay(1)
       );
   }
 
@@ -62,14 +57,7 @@ export class CampusListComponent {
 
   getCampusSubscript(campusInfo: CampusInfo): string {
     if (this.isCampusClosed(campusInfo)) {
-      // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
-      if (this.translate.currentLang == 'nl') {
-        // FIXME
-        return campusInfo.closed_info?.reason['nl'] || 'Gesloten';
-      } else {
-        return campusInfo.closed_info?.reason['en'] || 'Closed';
-      }
-      // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
+      return getClosedDisplay(this.translate.currentLang, campusInfo.closed_info, true);
     }
     // return 'Open from 11:45 to 13:45';
     // return 'Open from Monday to Friday';
@@ -88,5 +76,5 @@ export class CampusListComponent {
 
 interface CampusInfo {
   campus: Campus;
-  closed_info?: ActiveClosedDay;
+  closed_info: ClosingDay | null;
 }

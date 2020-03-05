@@ -3,8 +3,8 @@ import * as moment from "moment";
 import {CampusService} from "../../campus.service";
 import {combineLatest, Observable, ReplaySubject} from "rxjs";
 import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
-import {ApiResponse, ClosedDay} from "../../entities";
-import {dayToIso} from "../../utils";
+import {ApiResponse, ClosingDay, ClosingDays} from "../../entities";
+import {dayToIso, getClosedDisplay} from "../../utils";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
@@ -18,7 +18,7 @@ export class DaysDisplayComponent {
   campusName$: Observable<string>;
 
   previousWeek: moment.Moment;
-  nextWeek: moment.Moment;
+  nextWeek: moment.Moment | null;
 
   // INPUT: campus
   private campusSubject = new ReplaySubject<string>(1);
@@ -40,11 +40,15 @@ export class DaysDisplayComponent {
 
   @Input()
   set weekStart(value: moment.Moment) {
-    this._weekStart = value;
-    this.previousWeek = value.clone().subtract(1, 'week');
-    this.nextWeek = value.clone().add(1, 'week');
+    this._weekStart = value.clone().startOf('isoWeek');
+    this.previousWeek = this._weekStart.clone().subtract(1, 'week');
+    if (this._weekStart > moment()) {
+      this.nextWeek = null;
+    } else {
+      this.nextWeek = this._weekStart.clone().add(1, 'week');
+    }
 
-    this.weekStartSubject.next(value);
+    this.weekStartSubject.next(this._weekStart);
   }
 
   get weekStart(): moment.Moment {
@@ -64,11 +68,11 @@ export class DaysDisplayComponent {
 
           return this.campusService.getWeekClosingDays(weekStart, campus)
             .pipe(
-              ApiResponse.awaitReady<(ClosedDay | null)[]>(),
+              ApiResponse.awaitReady<ClosingDays>(),
               startWith([null, null, null, null, null]),
             );
         }),
-        map((days: (ClosedDay | null)[]) => days.map((closed, index) => ({
+        map((days: ClosingDays) => days.map((closed, index) => ({
           closed: closed,
           day: this.weekStart.clone().add(index, 'days')
         }))),
@@ -130,18 +134,7 @@ export class DaysDisplayComponent {
   }
 
   getDaySubscript(info: DayInfo): string {
-    if (this.isCampusClosed(info)) {
-      // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
-      if (this.translate.currentLang == 'nl') {
-        // FIXME
-        return info.closed?.reason['nl'] || 'Gesloten';
-      } else {
-        return info.closed?.reason['en'] || 'Closed';
-      }
-      // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
-    }
-    // return 'Open from 11:45 to 13:45';
-    return '';
+    return getClosedDisplay(this.translate.currentLang, info.closed, false);
   }
 
   dayForUrl(day: moment.Moment): string {
@@ -151,5 +144,5 @@ export class DaysDisplayComponent {
 
 interface DayInfo {
   day: moment.Moment;
-  closed: ClosedDay | null;
+  closed: ClosingDay | null;
 }

@@ -1,10 +1,10 @@
 import {Component, Input} from '@angular/core';
-import {ApiResponse, ClosedDay, FoodType, foodTypeIcons, Menu, MenuItem} from "../../entities";
+import {ApiResponse, ClosingDay, FoodType, foodTypeIcons, MenuItem} from "../../entities";
 import {combineLatest, Observable, ReplaySubject} from "rxjs";
 import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
 import {CampusService} from "../../campus.service";
 import * as moment from "moment";
-import {dayToIso, getNextWeekDay, getPreviousWeekDay} from "../../utils";
+import {dayToIso, getClosedDisplay, getNextWeekDay, getPreviousWeekDay} from "../../utils";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
@@ -17,8 +17,9 @@ export class MenuDisplayComponent {
   menuInfo$: Observable<ApiResponse<MenuInfo>>;
   campusName$: Observable<string>;
 
+  weekStart: moment.Moment;
   previousDay: moment.Moment;
-  nextDay: moment.Moment;
+  nextDay: moment.Moment | null;
 
   // INPUT: campus
   private campusSubject = new ReplaySubject<string>(1);
@@ -40,11 +41,17 @@ export class MenuDisplayComponent {
 
   @Input()
   set day(value: moment.Moment) {
-    this._day = value;
-    this.previousDay = getPreviousWeekDay(value);
-    this.nextDay = getNextWeekDay(value);
+    this.weekStart = value.clone().startOf('isoWeek');
 
-    this.daySubject.next(value);
+    this._day = value.clone();
+    this.previousDay = getPreviousWeekDay(this._day);
+    if (this.weekStart > moment() && this._day.isoWeekday() >= 5) {
+      this.nextDay = null;
+    } else {
+      this.nextDay = getNextWeekDay(this._day);
+    }
+
+    this.daySubject.next(this._day);
   }
 
   get day(): moment.Moment {
@@ -69,14 +76,14 @@ export class MenuDisplayComponent {
           const day: moment.Moment = data[1];
 
           return ApiResponse.combineLatest([
-            this.campusService.getMenuForDay(campus, day),
+            this.campusService.getMenuForDay(day, campus),
             this.campusService.getCampusClosed(day, campus)
           ]);
         }),
         ApiResponse.pipe(
           map(data => {
-            const menu: Menu = data[0];
-            const closed: ClosedDay | null = data[1];
+            const menu: MenuItem[] = data[0];
+            const closed: ClosingDay | null = data[1];
 
             return {
               menu: menu,
@@ -108,10 +115,8 @@ export class MenuDisplayComponent {
 
   getTranslation(item: MenuItem): string {
     if (this.translate.currentLang == 'nl') {
-      // FIXME
       return item.translation['nl'] || 'Missing translation';
     } else {
-      // FIXME: English translations aren't available sometimes
       return item.translation['en'] || item.translation['nl'] || 'Missing translation';
     }
   }
@@ -128,24 +133,16 @@ export class MenuDisplayComponent {
   }
 
   getClosedDisplay(menuInfo: MenuInfo): string {
-    if (menuInfo.closed) {
-      // return 'Closed for X (DD-MM-YYYY - DD-MM-YYYY)';
-      if (this.translate.currentLang == 'nl') {
-        // FIXME
-        return menuInfo.closed.reason['nl'] || 'Gesloten';
-      } else {
-        return menuInfo.closed.reason['en'] || 'Closed';
-      }
-      // return 'Closed for X (DD\xa0Month - DD\xa0Month)'; // Alternatively. \xa0 == non breaking space
-    }
-    // return 'Open from 11:45 to 13:45';
-    // return 'Open from Monday to Friday';
-    // TODO: Opening hours
-    return '';
+    return getClosedDisplay(this.translate.currentLang, menuInfo.closed, true);
+  }
+
+  get isMenuProvisional(): boolean {
+    const now = moment();
+    return this.weekStart > now && now.isoWeekday() <= 4;
   }
 }
 
 interface MenuInfo {
-  menu: Menu;
-  closed: ClosedDay | null;
+  menu: MenuItem[];
+  closed: ClosingDay | null;
 }

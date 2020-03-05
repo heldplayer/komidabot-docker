@@ -21,11 +21,18 @@
       {{description | translate}}
     </div>
 
-    <a [routerLink]="['/campus', campus, 'w', dayForUrl(nextWeek)]"
+    <a *ngIf="nextWeek !== null; else disabledNextWeek"
+       [routerLink]="['/campus', campus, 'w', dayForUrl(nextWeek)]"
        class="btn btn-outline-dark px-3 py-2"
        style="border: 0 none; border-radius: 0; box-shadow: none;">
       <i class="fa fa-chevron-right"></i>
     </a>
+    <ng-template #disabledNextWeek>
+      <span class="btn btn-outline-dark disabled px-3 py-2"
+            style="border: 0 none; border-radius: 0; box-shadow: none;">
+        <i class="fa fa-chevron-right"></i>
+      </span>
+    </ng-template>
   </div>
 
   <!-- Body -->

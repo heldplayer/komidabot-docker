@@ -7,6 +7,7 @@
   "MENU.ERROR": "Error loading the menu.",
   "MENU.LOADING": "Loading...",
   "MENU.EMPTY": "No menu available for this day.",
+  "MENU.PROVISIONAL": "Provisional menu",
   "SPLASH.LOADING": "Loading...",
   "WEEK.NEXT": "Next week",
   "WEEK.CURRENT": "This week",

@@ -12,7 +12,8 @@
           "/manifest.webmanifest",
           "/*.css",
           "/*.js",
-          "/assets/i18n/**"
+          "/assets/i18n/**",
+          "/assets/*.json"
         ]
       }
     },
@@ -24,6 +25,7 @@
         "files": [
           "/assets/**",
           "!/assets/i18n/**",
+          "!/assets/*.json",
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
@@ -34,20 +36,16 @@
       "name": "volatile",
       "version": 1,
       "cacheConfig": {
-        "maxSize": 50,
+        "maxSize": 100,
         "maxAge": "1h",
         "strategy": "performance"
       },
       "urls": [
         "/api/campus/closing_days/*",
-        "/api/campus/closing_days/*/*",
         "/api/campus/*/closing_days/*",
-        "/api/campus/*/closing_days/*/*",
         "/api/campus/*/menu/*",
         "/api-dev/campus/closing_days/*",
-        "/api-dev/campus/closing_days/*/*",
         "/api-dev/campus/*/closing_days/*",
-        "/api-dev/campus/*/closing_days/*/*",
         "/api-dev/campus/*/menu/*"
       ]
     },
@@ -56,7 +54,7 @@
       "version": 1,
       "cacheConfig": {
         "maxSize": 10,
-        "maxAge": "1d",
+        "maxAge": "7d",
         "strategy": "performance"
       },
       "urls": [
