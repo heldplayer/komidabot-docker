@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {combineLatest, Observable} from "rxjs";
-import {ActiveClosedDay, ActiveClosingDays, Campus} from "../entities";
+import {Component} from '@angular/core';
+import {Observable} from "rxjs";
+import {ActiveClosedDay, ActiveClosingDays, ApiResponse, Campus} from "../entities";
 import {CampusService} from "../campus.service";
 import * as moment from "moment";
 import {map} from "rxjs/operators";
@@ -11,12 +11,12 @@ import {TranslateService} from "@ngx-translate/core";
   templateUrl: './campus-list.component.html',
   styleUrls: ['./campus-list.component.scss']
 })
-export class CampusListComponent implements OnInit {
+export class CampusListComponent {
 
-  campuses$: Observable<Campus[]>;
-  closingDays$: Observable<Map<string, ActiveClosedDay>>;
+  campuses$: Observable<ApiResponse<Campus[]>>;
+  closingDays$: Observable<ApiResponse<Map<string, ActiveClosedDay>>>;
 
-  campusInfo$: Observable<CampusInfo[]>;
+  campusInfo$: Observable<ApiResponse<CampusInfo[]>>;
 
   constructor(
     private campusService: CampusService,
@@ -26,32 +26,33 @@ export class CampusListComponent implements OnInit {
 
     this.closingDays$ = this.campusService.getActiveClosingDays(moment())
       .pipe(
-        map((value: ActiveClosingDays) => {
-          const result = new Map<string, ActiveClosedDay>();
+        ApiResponse.pipe(
+          map((value: ActiveClosingDays) => {
+            const result = new Map<string, ActiveClosedDay>();
 
-          for (const campus in value.closing_days) {
-            result.set(campus, value.closing_days[campus]);
-          }
+            for (const campus in value.closing_days) {
+              result.set(campus, value.closing_days[campus]);
+            }
 
-          return result;
-        })
+            return result;
+          })
+        ),
       );
 
-    this.campusInfo$ = combineLatest(this.campuses$, this.closingDays$)
+    this.campusInfo$ = ApiResponse.combineLatest([this.campuses$, this.closingDays$])
       .pipe(
-        map(data => {
-          const campuses = <Campus[]>data[0];
-          const closingDays = <Map<string, ActiveClosedDay>>data[1];
+        ApiResponse.pipe(
+          map(data => {
+            const campuses = <Campus[]>data[0];
+            const closingDays = <Map<string, ActiveClosedDay>>data[1];
 
-          return campuses.map(value => ({
-            campus: value,
-            closed_info: closingDays.get(value.short_name),
-          }));
-        })
+            return campuses.map(value => ({
+              campus: value,
+              closed_info: closingDays.get(value.short_name),
+            }));
+          })
+        )
       );
-  }
-
-  ngOnInit(): void {
   }
 
   isCampusClosed(campusInfo: CampusInfo) {

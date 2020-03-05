@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import * as moment from "moment";
 import {CampusService} from "../../campus.service";
-import {Observable, ReplaySubject} from "rxjs";
-import {map, startWith, switchMap} from "rxjs/operators";
-import {ClosedDay} from "../../entities";
+import {combineLatest, Observable, ReplaySubject} from "rxjs";
+import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
+import {ApiResponse, ClosedDay} from "../../entities";
 import {dayToDisplay, dayToIso} from "../../utils";
 import {TranslateService} from "@ngx-translate/core";
 
@@ -12,11 +12,30 @@ import {TranslateService} from "@ngx-translate/core";
   templateUrl: './days-display.component.html',
   styleUrls: ['./days-display.component.scss']
 })
-export class DaysDisplayComponent implements OnInit {
+export class DaysDisplayComponent {
+
+  days$: Observable<DayInfo[]>;
+  campusName$: Observable<string>;
+
+  previousWeek: moment.Moment;
+  nextWeek: moment.Moment;
+
+  // INPUT: campus
+  private campusSubject = new ReplaySubject<string>(1);
+  private _campus: string;
 
   @Input()
-  campus: string;
+  set campus(value: string) {
+    this._campus = value;
+    this.campusSubject.next(value);
+  }
 
+  get campus(): string {
+    return this._campus;
+  }
+
+  // INPUT: weekStart
+  private weekStartSubject = new ReplaySubject<moment.Moment>(1);
   private _weekStart: moment.Moment;
 
   @Input()
@@ -32,11 +51,38 @@ export class DaysDisplayComponent implements OnInit {
     return this._weekStart;
   }
 
-  previousWeek: moment.Moment;
-  nextWeek: moment.Moment;
+  constructor(
+    private campusService: CampusService,
+    private translate: TranslateService,
+  ) {
+    this.days$ = combineLatest([this.campusSubject.asObservable(), this.weekStartSubject.asObservable()])
+      .pipe(
+        distinctUntilChanged((p, n) => p[0] === n[0] && p[1].isSame(p[1], 'week')),
+        switchMap(data => {
+          const campus: string = data[0];
+          const weekStart: moment.Moment = data[1];
 
-  private weekStartSubject = new ReplaySubject<moment.Moment>(1);
-  days$: Observable<DayInfo[]>;
+          return this.campusService.getWeekClosingDays(weekStart, campus);
+        }),
+        ApiResponse.awaitReady<(ClosedDay | null)[]>(),
+        startWith([null, null, null, null, null]),
+        map((days: (ClosedDay | null)[]) => days.map((closed, index) => ({
+          closed: closed,
+          day: this.weekStart.clone().add(index, 'days')
+        }))),
+      );
+
+    this.campusName$ = this.campusSubject.asObservable()
+      .pipe(
+        switchMap(campus => this.campusService.getCampus(campus)
+          .pipe(
+            ApiResponse.awaitReady(),
+            map(campus => campus.name),
+            startWith(campus),
+          )
+        ),
+      );
+  }
 
   get days(): moment.Moment[] {
     const weekStart = this.weekStart.startOf('isoWeek');
@@ -75,32 +121,6 @@ export class DaysDisplayComponent implements OnInit {
     }
 
     return '';
-  }
-
-  constructor(
-    private campusService: CampusService,
-    private translate: TranslateService,
-  ) {
-    this.days$ = this.weekStartSubject.asObservable()
-      .pipe(
-        switchMap((weekStart: moment.Moment) => this.campusService.getWeekClosingDays(weekStart, this.campus)),
-        map((days: (ClosedDay | null)[]) => days.map((closed, index) => ({
-          closed: closed,
-          day: this.weekStart.clone().add(index, 'days')
-        })))
-      );
-  }
-
-  ngOnInit(): void {
-    this.campusService.getWeekClosingDays(this.weekStart, this.campus)
-  }
-
-  getCampusName(campus: string): Observable<string> {
-    return this.campusService.getCampus(campus)
-      .pipe(
-        map(campus => campus.name),
-        startWith(campus)
-      );
   }
 
   isCampusClosed(info: DayInfo): boolean {

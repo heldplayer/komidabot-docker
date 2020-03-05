@@ -133,12 +133,12 @@ export class FacebookMessengerService implements OnDestroy {
       tap(x => console.log('App ID:', x))
     );
 
-    combineLatest(this.api$, this.appId$).pipe(
+    combineLatest([this.api$, this.appId$]).pipe(
       concatMap(apiData => {
         const api = <FacebookMessengerAPI>apiData[0];
         const appId = <string>apiData[1];
 
-        return combineLatest(api.getSupportedFeatures(), api.getContext(appId)).pipe(
+        return combineLatest([api.getSupportedFeatures(), api.getContext(appId)]).pipe(
           map(value => {
             const features = <string[]>value[0];
             const context = <ThreadContext>value[1];

@@ -1,13 +1,15 @@
 <div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="overflow: hidden;">
+  <!-- Header -->
   <div class="card-header py-2 px-2 d-flex align-items-center border-bottom-0 pb-2"
        style="height: 2.5rem;">
 
     <a class="ml-2 ml-md-3 mr-2" [routerLink]="['/']">Start</a>
     <span>/</span>
-    <a *ngIf="getCampusName(campus) | async as name"
+    <a *ngIf="campusName$ | async as name"
        class="ml-2 text-truncate">{{name}}</a>
   </div>
 
+  <!-- Sub-header -->
   <div class="card-header p-0 d-flex justify-content-between align-items-center">
     <a [routerLink]="['/campus', campus, 'w', dayForUrl(previousWeek)]"
        class="btn btn-outline-dark px-3 py-2"
@@ -26,6 +28,7 @@
     </a>
   </div>
 
+  <!-- Body -->
   <div class="list-group list-group-flush" *ngIf="days$ | async as days">
     <a *ngFor="let info of days"
        [routerLink]="['/campus', campus, 'd', dayForUrl(info.day)]"

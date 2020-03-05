@@ -1,34 +1,49 @@
 <div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="margin-bottom: 0 !important;">
-  <div class="card-header">{{'CAMPUS.LIST.HEADER' | translate}}</div>
-  <div class="list-group list-group-flush" *ngIf="campusInfo$ | async as campuses; else loadingCampuses">
-    <a *ngFor="let campusInfo of campuses"
-       [routerLink]="['/campus', campusInfo.campus.short_name]"
-       class="list-group-item campus-item py-2 px-3"
-       [class.closed]="isCampusClosed(campusInfo)">
-      <ng-container *ngIf="getCampusSubscript(campusInfo) as subscript; else noSubscript">
-        <span class="card-title d-block m-0">
-          <img *ngIf="isCampusClosed(campusInfo)"
-               src="/assets/twemoji/274c.png"
-               class="emoji"/>
+  <!-- Header -->
+  <div class="card-header">{{'CAMPUS_LIST.HEADER' | translate}}</div>
 
-          {{campusInfo.campus.name}}
-        </span>
-        <span class="card-subtitle d-block m-0 campus-subtitle">
-          {{subscript}}
-        </span>
+  <!-- Body -->
+  <ng-container *ngIf="campusInfo$ | async as campusInfo; else loadingCampuses">
+    <ng-container *ngIf="campusInfo.isLoaded; else errorLoading">
+      <div class="list-group list-group-flush">
+        <a *ngFor="let campusInfo of campusInfo.response"
+           [routerLink]="['/campus', campusInfo.campus.short_name]"
+           class="list-group-item campus-item py-2 px-3"
+           [class.closed]="isCampusClosed(campusInfo)">
+          <ng-container *ngIf="getCampusSubscript(campusInfo) as subscript; else noSubscript">
+            <span class="card-title d-block m-0">
+              <img *ngIf="isCampusClosed(campusInfo)"
+                   src="/assets/twemoji/274c.png"
+                   class="emoji"/>
+
+              {{campusInfo.campus.name}}
+            </span>
+            <span class="card-subtitle d-block m-0 campus-subtitle">
+              {{subscript}}
+            </span>
+          </ng-container>
+          <ng-template #noSubscript>
+            <span class="card-title d-block m-2">
+              <img *ngIf="isCampusClosed(campusInfo)"
+                   src="/assets/twemoji/274c.png"
+                   class="emoji"/>
+
+              {{campusInfo.campus.name}}
+            </span>
+          </ng-template>
+        </a>
+      </div>
+    </ng-container>
+
+    <ng-template #errorLoading>
+      <ng-container *ngIf="campusInfo.isErrored; else loadingCampuses">
+        <div class="card-body">{{'CAMPUS_LIST.ERROR' | translate}}</div>
       </ng-container>
-      <ng-template #noSubscript>
-        <span class="card-title d-block m-2">
-          <img *ngIf="isCampusClosed(campusInfo)"
-               src="/assets/twemoji/274c.png"
-               class="emoji"/>
+    </ng-template>
+  </ng-container>
 
-          {{campusInfo.campus.name}}
-        </span>
-      </ng-template>
-    </a>
-  </div>
+  <!-- Fallback body -->
   <ng-template #loadingCampuses>
-    <div class="card-body">{{'LOADING' | translate}}</div>
+    <div class="card-body">{{'CAMPUS_LIST.LOADING' | translate}}</div>
   </ng-template>
 </div>

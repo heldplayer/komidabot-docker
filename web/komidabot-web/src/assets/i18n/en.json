@@ -1,8 +1,12 @@
 {
   "APP.UPDATE_AVAILABLE": "New version available, click here to refresh.",
-  "CAMPUS.LIST.HEADER": "Select a campus",
-  "LOADING": "Loading...",
-  "MENU.NO_AVAILABLE": "No menu available for this day.",
+  "CAMPUS_LIST.ERROR": "Error loading the list of restaurants.",
+  "CAMPUS_LIST.LOADING": "Loading...",
+  "CAMPUS_LIST.HEADER": "Select a campus",
+  "MENU.ERROR": "Error loading the menu.",
+  "MENU.LOADING": "Loading...",
+  "MENU.EMPTY": "No menu available for this day.",
+  "SPLASH.LOADING": "Loading...",
   "WEEK.NEXT": "Next week",
   "WEEK.CURRENT": "This week",
   "WEEK.PREVIOUS": "Last week"

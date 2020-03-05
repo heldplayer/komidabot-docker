@@ -3,9 +3,8 @@
                     [campus]="display.campus"
                     [weekStart]="week_start"></app-days-display>
 
-  <app-menu-display *ngIf="display.menu as menu"
+  <app-menu-display *ngIf="display.menu_day as menu_day"
                     [campus]="display.campus"
-                    [menu]="menu"
-                    [day]="display.menu_day"></app-menu-display>
+                    [day]="menu_day"></app-menu-display>
 
 </ng-container>

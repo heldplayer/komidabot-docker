@@ -24,7 +24,7 @@ export class DebugComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    let subscription = this.messengerService.state
+    this.messengerService.state
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         value => {

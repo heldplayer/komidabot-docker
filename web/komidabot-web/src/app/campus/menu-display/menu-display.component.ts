@@ -1,7 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FoodType, foodTypeIcons, Menu, MenuItem} from "../../entities";
-import {Observable} from "rxjs";
-import {map, startWith} from "rxjs/operators";
+import {Component, Input} from '@angular/core';
+import {ApiResponse, FoodType, foodTypeIcons, Menu, MenuItem} from "../../entities";
+import {combineLatest, Observable, ReplaySubject} from "rxjs";
+import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
 import {CampusService} from "../../campus.service";
 import * as moment from "moment";
 import {dayToDisplay} from "../../utils";
@@ -12,16 +12,38 @@ import {TranslateService} from "@ngx-translate/core";
   templateUrl: './menu-display.component.html',
   styleUrls: ['./menu-display.component.scss']
 })
-export class MenuDisplayComponent implements OnInit {
+export class MenuDisplayComponent {
+
+  menu$: Observable<ApiResponse<Menu>>;
+  campusName$: Observable<string>;
+
+  // INPUT: campus
+  private campusSubject = new ReplaySubject<string>(1);
+  private _campus: string;
 
   @Input()
-  campus: string;
+  set campus(value: string) {
+    this._campus = value;
+    this.campusSubject.next(value);
+  }
+
+  get campus(): string {
+    return this._campus;
+  }
+
+  // INPUT: day
+  private daySubject = new ReplaySubject<moment.Moment>(1);
+  private _day: moment.Moment;
 
   @Input()
-  menu: Menu;
+  set day(value: moment.Moment) {
+    this._day = value;
+    this.daySubject.next(value);
+  }
 
-  @Input()
-  day: moment.Moment;
+  get day(): moment.Moment {
+    return this._day;
+  }
 
   get language() {
     return this.translate.currentLang;
@@ -31,16 +53,26 @@ export class MenuDisplayComponent implements OnInit {
     private campusService: CampusService,
     private translate: TranslateService,
   ) {
-  }
-
-  ngOnInit(): void {
-  }
-
-  getCampusName(campus: string): Observable<string> {
-    return this.campusService.getCampus(campus)
+    this.menu$ = combineLatest([this.campusSubject.asObservable(), this.daySubject.asObservable()])
       .pipe(
-        map(campus => campus.name),
-        startWith(campus)
+        distinctUntilChanged((p, n) => p[0] === n[0] && p[1].isSame(p[1], 'week')),
+        switchMap(data => {
+          const campus: string = data[0];
+          const day: moment.Moment = data[1];
+
+          return this.campusService.getMenuForDay(campus, day);
+        })
+      );
+
+    this.campusName$ = this.campusSubject.asObservable()
+      .pipe(
+        switchMap(campus => this.campusService.getCampus(campus)
+          .pipe(
+            ApiResponse.awaitReady(),
+            map(campus => campus.name),
+            startWith(campus),
+          )
+        ),
       );
   }
 
