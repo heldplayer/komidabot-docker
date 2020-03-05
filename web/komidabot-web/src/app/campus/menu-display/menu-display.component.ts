@@ -4,7 +4,7 @@ import {combineLatest, Observable, ReplaySubject} from "rxjs";
 import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
 import {CampusService} from "../../campus.service";
 import * as moment from "moment";
-import {dayToDisplay} from "../../utils";
+import {dayToIso, getNextWeekDay, getPreviousWeekDay} from "../../utils";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
@@ -16,6 +16,9 @@ export class MenuDisplayComponent {
 
   menu$: Observable<ApiResponse<Menu>>;
   campusName$: Observable<string>;
+
+  previousDay: moment.Moment;
+  nextDay: moment.Moment;
 
   // INPUT: campus
   private campusSubject = new ReplaySubject<string>(1);
@@ -38,6 +41,9 @@ export class MenuDisplayComponent {
   @Input()
   set day(value: moment.Moment) {
     this._day = value;
+    this.previousDay = getPreviousWeekDay(value);
+    this.nextDay = getNextWeekDay(value);
+
     this.daySubject.next(value);
   }
 
@@ -53,9 +59,11 @@ export class MenuDisplayComponent {
     private campusService: CampusService,
     private translate: TranslateService,
   ) {
+    // TODO: Check for closing day and display this here as well!
+
     this.menu$ = combineLatest([this.campusSubject.asObservable(), this.daySubject.asObservable()])
       .pipe(
-        distinctUntilChanged((p, n) => p[0] === n[0] && p[1].isSame(p[1], 'week')),
+        distinctUntilChanged((p, n) => p[0] === n[0] && p[1].isSame(n[1], 'day')),
         switchMap(data => {
           const campus: string = data[0];
           const day: moment.Moment = data[1];
@@ -76,8 +84,8 @@ export class MenuDisplayComponent {
       );
   }
 
-  dayForDisplay(day: moment.Moment) {
-    return dayToDisplay(day);
+  dayForUrl(day: moment.Moment): string {
+    return dayToIso(day);
   }
 
   getIconURL(item: MenuItem): string {

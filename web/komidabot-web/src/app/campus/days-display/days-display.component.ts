@@ -4,7 +4,7 @@ import {CampusService} from "../../campus.service";
 import {combineLatest, Observable, ReplaySubject} from "rxjs";
 import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
 import {ApiResponse, ClosedDay} from "../../entities";
-import {dayToDisplay, dayToIso} from "../../utils";
+import {dayToIso} from "../../utils";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
@@ -57,15 +57,17 @@ export class DaysDisplayComponent {
   ) {
     this.days$ = combineLatest([this.campusSubject.asObservable(), this.weekStartSubject.asObservable()])
       .pipe(
-        distinctUntilChanged((p, n) => p[0] === n[0] && p[1].isSame(p[1], 'week')),
+        distinctUntilChanged((p, n) => p[0] === n[0] && p[1].isSame(n[1], 'week')),
         switchMap(data => {
           const campus: string = data[0];
           const weekStart: moment.Moment = data[1];
 
-          return this.campusService.getWeekClosingDays(weekStart, campus);
+          return this.campusService.getWeekClosingDays(weekStart, campus)
+            .pipe(
+              ApiResponse.awaitReady<(ClosedDay | null)[]>(),
+              startWith([null, null, null, null, null]),
+            );
         }),
-        ApiResponse.awaitReady<(ClosedDay | null)[]>(),
-        startWith([null, null, null, null, null]),
         map((days: (ClosedDay | null)[]) => days.map((closed, index) => ({
           closed: closed,
           day: this.weekStart.clone().add(index, 'days')
@@ -144,10 +146,6 @@ export class DaysDisplayComponent {
 
   dayForUrl(day: moment.Moment): string {
     return dayToIso(day);
-  }
-
-  dayForDisplay(day: moment.Moment) {
-    return dayToDisplay(day);
   }
 }
 

@@ -116,11 +116,11 @@ export class CampusService {
           const url = `${config.api_endpoint}campus/${campus}/closing_days/${mondayString}/${fridayString}`;
           return this.http.get<ClosingDays>(url, httpGetOptions)
             .pipe(
-              tap((result) => console.log(`getting campus ${campus} closing days w/ response =`, result))
+              tap((result) => console.log(`getting campus ${campus} closing days w/ response =`, result)),
             );
         }),
         map((value: ClosingDays) => value.closing_days[campus]),
-        tap(x => console.log('getWeekClosingDays request gives', x)),
+        // tap(x => console.log('getWeekClosingDays request gives', x)),
         ApiResponse.convert<ClosedDay[]>(),
         shareReplay(1),
       );
@@ -140,7 +140,7 @@ export class CampusService {
 
     return ApiResponse.combineLatest(observables)
       .pipe(
-        tap(x => console.log('getWeekClosingDays gives', x))
+        // tap(x => console.log('getWeekClosingDays gives', x)),
       );
   }
 
@@ -163,7 +163,7 @@ export class CampusService {
               tap((result) => console.log('getting menu w/ response =', result))
             );
         }),
-        tap(x => console.log('getMenuForDay request gives', x)),
+        // tap(x => console.log('getMenuForDay request gives', x)),
         ApiResponse.convert<Menu>(),
         shareReplay(1)
       );
