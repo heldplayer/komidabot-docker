@@ -6,11 +6,12 @@
   <ng-container *ngIf="campusInfo$ | async as campusInfo; else loadingCampuses">
     <ng-container *ngIf="campusInfo.isLoaded; else errorLoading">
       <div class="list-group list-group-flush">
-        <a *ngFor="let campusInfo of campusInfo.response"
-           [routerLink]="['/campus', campusInfo.campus.short_name]"
-           class="list-group-item campus-item py-2 px-3"
-           [class.closed]="isCampusClosed(campusInfo)">
-          <ng-container *ngIf="getCampusSubscript(campusInfo) as subscript; else noSubscript">
+        <div *ngFor="let campusInfo of campusInfo.response"
+             class="list-group-item d-flex p-0 align-items-center">
+          <a [routerLink]="['/campus', campusInfo.campus.short_name]"
+             class="campus-item py-2 px-3 flex-grow-1"
+             [class.closed]="isCampusClosed(campusInfo)">
+            <ng-container *ngIf="getCampusSubscript(campusInfo) as subscript; else noSubscript">
             <span class="card-title d-block m-0">
               <img *ngIf="isCampusClosed(campusInfo)"
                    src="/assets/twemoji/274c.png"
@@ -18,11 +19,11 @@
 
               {{campusInfo.campus.name}}
             </span>
-            <span class="card-subtitle d-block m-0 campus-subtitle">
+              <span class="card-subtitle d-block m-0 campus-subtitle">
               {{subscript}}
             </span>
-          </ng-container>
-          <ng-template #noSubscript>
+            </ng-container>
+            <ng-template #noSubscript>
             <span class="card-title d-block m-2">
               <img *ngIf="isCampusClosed(campusInfo)"
                    src="/assets/twemoji/274c.png"
@@ -30,8 +31,15 @@
 
               {{campusInfo.campus.name}}
             </span>
-          </ng-template>
-        </a>
+            </ng-template>
+          </a>
+          <a *ngIf="!isCampusClosed(campusInfo)"
+             class="border-left align-self-stretch align-items-center d-flex"
+             style="line-height: 100%;"
+             [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]">
+            <span class="py-2 px-3">Today</span>
+          </a>
+        </div>
       </div>
     </ng-container>
 

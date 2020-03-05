@@ -5,6 +5,7 @@ import {CampusService} from "../campus.service";
 import * as moment from "moment";
 import {map} from "rxjs/operators";
 import {TranslateService} from "@ngx-translate/core";
+import {dayToIso} from "../utils";
 
 @Component({
   selector: 'app-campus-list',
@@ -74,6 +75,14 @@ export class CampusListComponent {
     // return 'Open from Monday to Friday';
     // TODO: Opening hours
     return '';
+  }
+
+  dayForUrl(day: moment.Moment): string {
+    return dayToIso(day);
+  }
+
+  get today(): moment.Moment {
+    return moment();
   }
 }
 
