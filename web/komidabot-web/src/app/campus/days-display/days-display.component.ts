@@ -116,6 +116,10 @@ export class DaysDisplayComponent {
       return 'WEEK.NEXT';
     }
 
+    if (this.nextWeek === null) {
+      return '';
+    }
+
     if (this._weekStart <= now && now < this.nextWeek) {
       return 'WEEK.CURRENT';
     }
