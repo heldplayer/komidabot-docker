@@ -18,6 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   deviceInfo: DeviceInfo;
   displaySplash: boolean;
   updateAvailable = false;
+  botRedirect = false;
 
   language: string;
 
@@ -72,6 +73,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     // this.displaySplash = true;
+
+    this.botRedirect = window.location.hostname === 'komidabot.heldplayer.blue';
   }
 
   ngOnDestroy(): void {

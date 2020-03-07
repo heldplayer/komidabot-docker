@@ -66,8 +66,6 @@ export class MenuDisplayComponent {
     private campusService: CampusService,
     private translate: TranslateService,
   ) {
-    // TODO: Check for closing day and display this here as well!
-
     this.menuInfo$ = combineLatest([this.campusSubject.asObservable(), this.daySubject.asObservable()])
       .pipe(
         distinctUntilChanged((p, n) => p[0] === n[0] && p[1].isSame(n[1], 'day')),

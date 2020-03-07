@@ -1,6 +1,6 @@
 import {ApplicationRef, Injectable} from '@angular/core';
 import {SwUpdate} from "@angular/service-worker";
-import {first} from "rxjs/operators";
+import {first, tap} from "rxjs/operators";
 import {concat, interval} from "rxjs";
 
 @Injectable({
@@ -19,7 +19,11 @@ export class CheckForUpdateService {
       const everyHour$ = interval(60 * 60 * 1000); // Every hour
       const everyHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
 
-      everyHourOnceAppIsStable$.subscribe(() => updates.checkForUpdate());
+      everyHourOnceAppIsStable$
+        .pipe(
+          tap(_ => console.log('Checking for updates'))
+        )
+        .subscribe(() => updates.checkForUpdate());
 
       updates.available.subscribe(event => {
         console.log('current version is', event.current);

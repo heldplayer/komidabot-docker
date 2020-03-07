@@ -1,5 +1,6 @@
 {
   "APP.UPDATE_AVAILABLE": "Nieuwe versie beschikbaar, klik hier om te vernieuwen.",
+  "APP.DOMAIN_CHANGE": "De bot is verhuisd naar komidabot.xyz, gelieve uw links aan te passen naar dit nieuwe domein.",
   "CAMPUS_LIST.ERROR": "Fout bij het laden van de lijst met restaurants.",
   "CAMPUS_LIST.LOADING": "Aan het laden...",
   "CAMPUS_LIST.HEADER": "Selecteer een campus",

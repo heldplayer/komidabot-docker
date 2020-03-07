@@ -1,5 +1,6 @@
 {
   "APP.UPDATE_AVAILABLE": "New version available, click here to refresh.",
+  "APP.DOMAIN_CHANGE": "The bot has moved to komidabot.xyz, please update your links to this new domain.",
   "CAMPUS_LIST.ERROR": "Error loading the list of restaurants.",
   "CAMPUS_LIST.LOADING": "Loading...",
   "CAMPUS_LIST.HEADER": "Select a campus",
