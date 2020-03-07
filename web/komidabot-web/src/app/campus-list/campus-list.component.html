@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="card-header d-flex align-items-center pr-2">
     <span class="mr-auto">{{'CAMPUS_LIST.HEADER' | translate}}</span>
-    <span>{{'CAMPUS_LIST.TODAY' | translate}}</span>
+    <span *ngIf="displayTodayButton">{{'CAMPUS_LIST.TODAY' | translate}}</span>
   </div>
 
   <!-- Body -->
@@ -36,13 +36,14 @@
             </span>
             </ng-template>
           </a>
-<!--          <a *ngIf="!isCampusClosed(campusInfo)"-->
-<!--             class="border-left align-self-stretch align-items-center d-flex"-->
-<!--             style="line-height: 100%;"-->
-<!--             [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]">-->
-<!--            <span class="py-2 px-3">{{'CAMPUS_LIST.TODAY' | translate}}</span>-->
-<!--          </a>-->
-          <a class="border-left align-self-stretch align-items-center d-flex"
+          <!--          <a *ngIf="!isCampusClosed(campusInfo)"-->
+          <!--             class="border-left align-self-stretch align-items-center d-flex"-->
+          <!--             style="line-height: 100%;"-->
+          <!--             [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]">-->
+          <!--            <span class="py-2 px-3">{{'CAMPUS_LIST.TODAY' | translate}}</span>-->
+          <!--          </a>-->
+          <a *ngIf="displayTodayButton"
+             class="border-left align-self-stretch align-items-center d-flex"
              style="line-height: 100%;"
              [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]">
             <img class="mx-3 my-2 flex-shrink-0" style="width: 2em; height: 2em;" src="/assets/twemoji/23e9.png"/>

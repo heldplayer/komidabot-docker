@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {Observable} from "rxjs";
-import {ApiResponse, Campus, ClosingDay, DayClosings, ResponseState} from "../entities";
+import {ApiResponse, Campus, ClosingDay, DayClosings} from "../entities";
 import {CampusService} from "../campus.service";
 import * as moment from "moment";
-import {map, shareReplay, startWith, tap} from "rxjs/operators";
+import {map, shareReplay, tap} from "rxjs/operators";
 import {TranslateService} from "@ngx-translate/core";
 import {dayToIso, getClosedDisplay} from "../utils";
 
@@ -71,6 +71,10 @@ export class CampusListComponent {
 
   get today(): moment.Moment {
     return moment();
+  }
+
+  get displayTodayButton(): boolean {
+    return moment().isoWeekday() <= 5;
   }
 }
 
