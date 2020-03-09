@@ -1,36 +1,44 @@
 <nav class="navbar navbar-dark bg-primary">
   <a class="navbar-brand" [routerLink]="['/']">Komidabot</a>
   <!--  <button class="btn btn-light" onClick="document.location.reload(true)">Reload page</button>-->
-  <a class="mr-3 ml-auto d-block text-light text-center"
-     style="font-size: 1.5rem; width: 2rem; height: 2rem; line-height: 2rem;"
-     [routerLink]="['/settings']">
-    <i class="fa fa-cog"></i>
-  </a>
-  <div *ngIf="language$ | async as language" class="btn-group btn-group-toggle">
-    <label class="btn btn-light" [class.active]="language === 'nl'">
-      <input type="radio" name="nav-language" value="nl" (click)="setLanguage('nl')" [checked]="language === 'nl'">
-      NL
+  <ng-container *ngIf="!isOnSettings(); else settingsPage">
+    <a class="mr-3 ml-auto d-block text-light text-center"
+       style="font-size: 1.5rem; width: 2rem; height: 2rem; line-height: 2rem;"
+       [routerLink]="['/settings']">
+      <i class="fa fa-cog"></i>
+    </a>
+    <div *ngIf="language$ | async as language" class="btn-group btn-group-toggle">
+      <label class="btn btn-light" [class.active]="language === 'nl'">
+        <input type="radio" name="nav-language" value="nl" (click)="setLanguage('nl')" [checked]="language === 'nl'">
+        NL
+        <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+        <!--           src="/assets/twemoji/1f1f3-1f1f1.png"/>-->
+        <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+        <!--           src="/assets/twemoji/language-dutch.png"/>-->
+      </label>
+      <!--    <label class="btn btn-light" [class.active]="language === 'fr'">-->
+      <!--      <input type="radio" name="language" value="en" (click)="setLanguage('fr')" [checked]="language === 'fr'">-->
       <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-      <!--           src="/assets/twemoji/1f1f3-1f1f1.png"/>-->
+      <!--           src="/assets/twemoji/1f1eb-1f1f7.png"/>-->
       <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-      <!--           src="/assets/twemoji/language-dutch.png"/>-->
-    </label>
-    <!--    <label class="btn btn-light" [class.active]="language === 'fr'">-->
-    <!--      <input type="radio" name="language" value="en" (click)="setLanguage('fr')" [checked]="language === 'fr'">-->
-    <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-    <!--           src="/assets/twemoji/1f1eb-1f1f7.png"/>-->
-    <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-    <!--           src="/assets/twemoji/language-french.png"/>-->
-    <!--    </label>-->
-    <label class="btn btn-light" [class.active]="language === 'en'">
-      <input type="radio" name="nav-language" value="en" (click)="setLanguage('en')" [checked]="language === 'en'">
-      EN
-      <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-      <!--           src="/assets/twemoji/1f1ec-1f1e7.png"/>-->
-      <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-      <!--           src="/assets/twemoji/language-english.png"/>-->
-    </label>
-  </div>
+      <!--           src="/assets/twemoji/language-french.png"/>-->
+      <!--    </label>-->
+      <label class="btn btn-light" [class.active]="language === 'en'">
+        <input type="radio" name="nav-language" value="en" (click)="setLanguage('en')" [checked]="language === 'en'">
+        EN
+        <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+        <!--           src="/assets/twemoji/1f1ec-1f1e7.png"/>-->
+        <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
+        <!--           src="/assets/twemoji/language-english.png"/>-->
+      </label>
+    </div>
+  </ng-container>
+  <ng-template #settingsPage>
+    <a class="btn btn-light"
+       [routerLink]="['/']">
+      {{'SETTINGS.GO_BACK' | translate}}
+    </a>
+  </ng-template>
 </nav>
 <a *ngIf="updateAvailable"
    class="d-block p-2 bg-warning text-center"

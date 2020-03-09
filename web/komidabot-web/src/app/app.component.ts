@@ -6,6 +6,7 @@ import {SwUpdate} from "@angular/service-worker";
 import {Observable, Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {SettingsService} from "./settings.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-component',
@@ -25,10 +26,11 @@ export class AppComponent implements OnInit, OnDestroy {
   // noinspection JSUnusedLocalSymbols
   constructor(
     private deviceService: DeviceDetectorService,
+    private updates: SwUpdate,
+    private router: Router,
     // Add here to force starting this service
     private updateService: CheckForUpdateService,
     private messengerService: FacebookMessengerService,
-    private updates: SwUpdate,
     private settings: SettingsService,
   ) {
     this.displaySplash = window.location.pathname == '/pwa_start';
@@ -89,6 +91,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setLanguage(language: string) {
     this.settings.setLanguage(language);
+  }
+
+  isOnSettings(): boolean {
+    return this.router.isActive('/settings', true);
   }
 }
 
