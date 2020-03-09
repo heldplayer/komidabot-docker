@@ -7,13 +7,14 @@ import {
   CampusListResponse,
   ClosingDay,
   ClosingDays,
-  ClosingDaysResponse, DayClosings,
+  ClosingDaysResponse,
+  DayClosings,
   MenuItem,
   MenuResponse
 } from "./entities";
 import {AppConfigService} from "./app-config.service";
-import {concatMap, debounceTime, map, pluck, shareReplay, switchMap, tap} from "rxjs/operators";
-import * as moment from 'moment';
+import {concatMap, map, pluck, shareReplay, switchMap, tap} from "rxjs/operators";
+import * as moment from "moment";
 import {unsafeCast} from "./utils";
 
 const httpGetOptions = {
@@ -56,6 +57,14 @@ export class CampusService {
     return this.campuses$.pipe(
       ApiResponse.pipe(
         map(campuses => <Campus>campuses.find(campus => campus.short_name === short_name))
+      ),
+    );
+  }
+
+  getCampusById(id: number): Observable<ApiResponse<Campus>> {
+    return this.campuses$.pipe(
+      ApiResponse.pipe(
+        map(campuses => <Campus>campuses.find(campus => campus.id === id))
       ),
     );
   }

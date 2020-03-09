@@ -7,6 +7,7 @@ import {CampusComponent} from "./campus/campus.component";
 import {PwaStartComponent} from "./pwa-start/pwa-start.component";
 import {WebBaseComponent} from "./web-base/web-base.component";
 import {ImageListComponent} from "./image-list/image-list.component";
+import {SettingsComponent} from "./settings/settings.component";
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'base', component: WebBaseComponent},
   {path: 'debug', component: DebugComponent},
   {path: 'images', component: ImageListComponent},
+  {path: 'settings', component: SettingsComponent},
   {path: 'campus/:campus/d/:date', component: CampusComponent},
   {path: 'campus/:campus/w/:week', component: CampusComponent},
   {path: 'campus/:campus', component: CampusComponent},

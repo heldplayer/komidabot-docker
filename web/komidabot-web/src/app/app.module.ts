@@ -28,6 +28,7 @@ import localeFr from '@angular/common/locales/fr';
 import localeNl from '@angular/common/locales/nl';
 import {LocalizedDatePipe} from './localized-date.pipe';
 import { ImageListComponent } from './image-list/image-list.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 registerLocaleData(localeEn, 'en');
@@ -54,6 +55,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DaysDisplayComponent,
     LocalizedDatePipe,
     ImageListComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,

@@ -3,9 +3,9 @@ import {CheckForUpdateService} from "./check-for-update.service";
 import {FacebookMessengerService} from "./facebook-messenger.service";
 import {DeviceDetectorService} from "ngx-device-detector";
 import {SwUpdate} from "@angular/service-worker";
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
-import {TranslateService} from "@ngx-translate/core";
+import {SettingsService} from "./settings.service";
 
 @Component({
   selector: 'app-component',
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   updateAvailable = false;
   botRedirect = false;
 
-  language: string;
+  language$: Observable<string>;
 
   // noinspection JSUnusedLocalSymbols
   constructor(
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private updateService: CheckForUpdateService,
     private messengerService: FacebookMessengerService,
     private updates: SwUpdate,
-    private translate: TranslateService,
+    private settings: SettingsService,
   ) {
     this.displaySplash = window.location.pathname == '/pwa_start';
 
@@ -39,10 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe(_ => this.updateAvailable = true);
 
-    this.language = localStorage.getItem('preferences.language') || 'nl';
-
-    this.translate.setDefaultLang('nl');
-    this.translate.use(this.language);
+    this.language$ = this.settings.getLanguage();
   }
 
   ngOnInit(): void {
@@ -91,9 +88,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   setLanguage(language: string) {
-    localStorage.setItem('preferences.language', language);
-    this.language = language;
-    this.translate.use(language);
+    this.settings.setLanguage(language);
   }
 }
 
