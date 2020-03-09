@@ -27,8 +27,8 @@ import localeEn from '@angular/common/locales/en';
 import localeFr from '@angular/common/locales/fr';
 import localeNl from '@angular/common/locales/nl';
 import {LocalizedDatePipe} from './localized-date.pipe';
-import { ImageListComponent } from './image-list/image-list.component';
-import { SettingsComponent } from './settings/settings.component';
+import {ImageListComponent} from './image-list/image-list.component';
+import {SettingsComponent} from './settings/settings.component';
 
 
 registerLocaleData(localeEn, 'en');
@@ -61,7 +61,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+    ServiceWorkerModule.register('custom-service-worker.js', {enabled: environment.production}),
     DeviceDetectorModule.forRoot(),
     TranslateModule.forRoot({
       defaultLanguage: 'nl',

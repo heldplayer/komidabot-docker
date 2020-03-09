@@ -38,7 +38,8 @@
                 "glob": "apple-touch-*.png",
                 "input": "src/assets/icons",
                 "output": "/"
-              }
+              },
+              "src/custom-service-worker.js"
             ],
             "styles": [
               "src/styles.scss",
