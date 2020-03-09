@@ -64,15 +64,17 @@
       </ng-container>
     </ng-container>
 
-    <!--<div class="row mb-2">-->
-    <!--  <div class="col-sm">-->
-    <!--    {{'SETTINGS.SUBSCRIPTION' | translate}}-->
-    <!--  </div>-->
-    <!--  <div class="col-sm text-right">-->
-    <!--    <button class="btn btn-dark" disabled>-->
-    <!--      {{'COMING_SOON' | translate}}-->
-    <!--    </button>-->
-    <!--  </div>-->
-    <!--</div>-->
+    <div *ngIf="showSubscriptionButton$ | async"
+         class="row mb-2">
+      <div class="col-sm">
+        {{'SETTINGS.SUBSCRIPTION' | translate}}
+      </div>
+      <div class="col-sm text-right">
+        <app-subscription-button></app-subscription-button>
+        <!--        <button class="btn btn-dark" disabled>-->
+        <!--          {{'COMING_SOON' | translate}}-->
+        <!--        </button>-->
+      </div>
+    </div>
   </div>
 </div>

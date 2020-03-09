@@ -4,6 +4,7 @@ import {SettingsService} from "../settings.service";
 import {CampusService} from "../campus.service";
 import {ApiResponse, Campus} from "../entities";
 import {map} from "rxjs/operators";
+import {AppConfigService} from "../app-config.service";
 
 @Component({
   selector: 'app-settings',
@@ -24,9 +25,12 @@ export class SettingsComponent implements OnInit {
 
   campuses$: Observable<Campus[]>;
 
+  showSubscriptionButton$: Observable<boolean>;
+
   constructor(
     private settings: SettingsService,
     private campusService: CampusService,
+    private appConfig: AppConfigService,
   ) {
     this.language$ = this.settings.getLanguage();
     this.startup$ = this.settings.getStartup()
@@ -53,6 +57,10 @@ export class SettingsComponent implements OnInit {
       .pipe(
         ApiResponse.awaitReady(),
       );
+
+    this.showSubscriptionButton$ = this.appConfig.config.pipe(
+      map(config => config.api_endpoint === '/api-dev/')
+    );
   }
 
   ngOnInit(): void {
