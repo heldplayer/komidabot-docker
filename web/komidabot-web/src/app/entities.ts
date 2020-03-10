@@ -1,4 +1,4 @@
-import {catchError, distinctUntilChanged, filter, map, startWith, tap} from "rxjs/operators";
+import {catchError, distinctUntilChanged, filter, map, startWith} from "rxjs/operators";
 import {combineLatest, merge, Observable, OperatorFunction, pipe} from "rxjs";
 
 export type Translation = Record<string, string>
@@ -25,30 +25,50 @@ export interface ClosingDay {
   reason: Translation;
 }
 
-export const enum FoodType {
+export const enum CourseType {
   SOUP = 1,
-  MEAT = 2,
-  VEGAN = 3,
+  DAILY = 2,
+  PASTA = 3,
   GRILL = 4,
-  PASTA_MEAT = 5,
-  PASTA_VEGAN = 6,
-  SALAD = 7,
-  SUB = 8,
+  SALAD = 5,
+  SUB = 6,
 }
 
-export const foodTypeIcons = {
-  [FoodType.SOUP]: '1f375-alt',
-  [FoodType.MEAT]: '1f32e',
-  [FoodType.VEGAN]: '1f966',
-  [FoodType.GRILL]: '1f969',
-  [FoodType.PASTA_MEAT]: '1f35d',
-  [FoodType.PASTA_VEGAN]: '1f35d-Dvegan-alt-alt-dark',
-  [FoodType.SALAD]: '1f957',
-  [FoodType.SUB]: '1f956',
+export const enum CourseSubType {
+  NORMAL = 1,
+  VEGAN = 2,
+}
+
+export const courseIcons = {
+  [CourseType.SOUP]: {
+    [CourseSubType.NORMAL]: '1f375-alt',
+    [CourseSubType.VEGAN]: '1f375-alt-vegan',
+  },
+  [CourseType.DAILY]: {
+    [CourseSubType.NORMAL]: '1f354',
+    [CourseSubType.VEGAN]: '1f354-vegan',
+  },
+  [CourseType.PASTA]: {
+    [CourseSubType.NORMAL]: '1f35d',
+    [CourseSubType.VEGAN]: '1f35d-vegan',
+  },
+  [CourseType.GRILL]: {
+    [CourseSubType.NORMAL]: '1f969',
+    [CourseSubType.VEGAN]: '1f969-vegan',
+  },
+  [CourseType.SALAD]: {
+    [CourseSubType.NORMAL]: '1f957',
+    [CourseSubType.VEGAN]: '1f957-vegan',
+  },
+  [CourseType.SUB]: {
+    [CourseSubType.NORMAL]: '1f956',
+    [CourseSubType.VEGAN]: '1f956-vegan',
+  },
 };
 
 export interface MenuItem {
-  food_type: number;
+  course_type: number;
+  course_sub_type: number;
   translation: Translation;
   price_students?: string;
   price_staff?: string;

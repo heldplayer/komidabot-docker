@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {ApiResponse, ClosingDay, FoodType, foodTypeIcons, MenuItem} from "../../entities";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ApiResponse, ClosingDay, courseIcons, CourseSubType, CourseType, MenuItem} from "../../entities";
 import {combineLatest, Observable, ReplaySubject} from "rxjs";
 import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
 import {CampusService} from "../../campus.service";
@@ -62,6 +62,9 @@ export class MenuDisplayComponent {
     return this.translate.currentLang;
   }
 
+  @Output()
+  daySelected: EventEmitter<moment.Moment> = new EventEmitter();
+
   constructor(
     private campusService: CampusService,
     private translate: TranslateService,
@@ -108,7 +111,7 @@ export class MenuDisplayComponent {
   }
 
   getIconURL(item: MenuItem): string {
-    return `/assets/twemoji/${foodTypeIcons[<FoodType>item.food_type]}.png`;
+    return `/assets/twemoji/${courseIcons[<CourseType>item.course_type][<CourseSubType>item.course_sub_type]}.png`;
   }
 
   getTranslation(item: MenuItem): string {
@@ -137,6 +140,12 @@ export class MenuDisplayComponent {
   get isMenuProvisional(): boolean {
     const now = moment();
     return this.weekStart > now && now.isoWeekday() <= 4;
+  }
+
+  selectDay(date: moment.Moment | null) {
+    if (date) {
+      this.daySelected.emit(date);
+    }
   }
 }
 

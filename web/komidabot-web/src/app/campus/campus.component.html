@@ -5,6 +5,7 @@
 
   <app-menu-display *ngIf="display.menu_day as menu_day"
                     [campus]="display.campus"
-                    [day]="menu_day"></app-menu-display>
+                    [day]="menu_day"
+                    (daySelected)="selectDay($event)"></app-menu-display>
 
 </ng-container>
