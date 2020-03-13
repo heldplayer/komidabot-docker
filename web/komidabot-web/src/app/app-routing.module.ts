@@ -1,7 +1,5 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DebugComponent} from "./debug/debug.component";
-import {DefaultComponent} from "./default/default.component";
 import {ErrorPageComponent} from "./error-page/error-page.component";
 import {CampusComponent} from "./campus/campus.component";
 import {PwaStartComponent} from "./pwa-start/pwa-start.component";
@@ -12,10 +10,11 @@ import {MenuOverviewComponent} from "./menu-overview/menu-overview.component";
 
 
 const routes: Routes = [
-  {path: '', component: DefaultComponent, pathMatch: 'full'},
+  {path: '', component: WebBaseComponent, pathMatch: 'full'},
   {path: 'pwa_start', component: PwaStartComponent, pathMatch: 'full'},
-  {path: 'base', component: WebBaseComponent},
-  {path: 'debug', component: DebugComponent},
+  // {path: 'base', component: WebBaseComponent},
+  // {path: 'debug', component: DebugComponent},
+  // {path: 'error-page', component: ErrorPageComponent},
   {path: 'images', component: ImageListComponent},
   {path: 'settings', component: SettingsComponent},
   {path: 'overview/:date', component: MenuOverviewComponent},

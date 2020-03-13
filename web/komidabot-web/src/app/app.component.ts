@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CheckForUpdateService} from "./check-for-update.service";
-import {FacebookMessengerService} from "./facebook-messenger.service";
 import {DeviceDetectorService} from "ngx-device-detector";
 import {SwUpdate} from "@angular/service-worker";
 import {Observable, Subject} from "rxjs";
@@ -30,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     // Add here to force starting this service
     private updateService: CheckForUpdateService,
-    private messengerService: FacebookMessengerService,
+    // private messengerService: FacebookMessengerService,
     private settings: SettingsService,
   ) {
     this.displaySplash = window.location.pathname == '/pwa_start';

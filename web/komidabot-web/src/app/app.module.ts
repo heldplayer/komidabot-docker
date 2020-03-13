@@ -2,7 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
-import {FacebookMessengerService} from './facebook-messenger.service';
 import {DebugComponent} from "./debug/debug.component";
 import {AppComponent} from "./app.component";
 import {DefaultComponent} from './default/default.component';
@@ -27,9 +26,9 @@ import localeEn from '@angular/common/locales/en';
 import localeFr from '@angular/common/locales/fr';
 import localeNl from '@angular/common/locales/nl';
 import {LocalizedDatePipe} from './localized-date.pipe';
-import { ImageListComponent } from './image-list/image-list.component';
-import { SettingsComponent } from './settings/settings.component';
-import { MenuOverviewComponent } from './menu-overview/menu-overview.component';
+import {ImageListComponent} from './image-list/image-list.component';
+import {SettingsComponent} from './settings/settings.component';
+import {MenuOverviewComponent} from './menu-overview/menu-overview.component';
 
 
 registerLocaleData(localeEn, 'en');
@@ -75,7 +74,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
   ],
   providers: [
-    FacebookMessengerService,
+    // FacebookMessengerService,
     {
       provide: APP_INITIALIZER,
       multi: true,
@@ -85,7 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
           return configService.loadAppConfig();
         }
       }
-    }
+    },
   ],
   bootstrap: [AppComponent]
 })
