@@ -1,6 +1,8 @@
 {
-  "APP.UPDATE_AVAILABLE": "Nieuwe versie beschikbaar, klik hier om te vernieuwen.",
+  "APP.COVID19_INFO_LINK": "https://uantwerpen.be/nl/studentenleven/eten/over-komida/online-bestellen/",
+  "APP.COVID19_UNAVAILABLE": "Beste gebruiker, momenteel zijn online menu's niet beschikbaar. Klik hier om doorverwezen te worden naar de infopagina van de Komida.",
   "APP.DOMAIN_CHANGE": "De bot is verhuisd naar komidabot.xyz, gelieve uw links aan te passen naar dit nieuwe domein.",
+  "APP.UPDATE_AVAILABLE": "Nieuwe versie beschikbaar, klik hier om te vernieuwen.",
   "CAMPUS_LIST.ERROR": "Fout bij het laden van de lijst met restaurants.",
   "CAMPUS_LIST.LOADING": "Aan het laden...",
   "CAMPUS_LIST.HEADER": "Selecteer een campus",

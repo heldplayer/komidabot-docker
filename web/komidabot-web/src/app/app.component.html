@@ -48,7 +48,7 @@
 
 <a *ngIf="botRedirect"
    class="d-block p-2 bg-warning text-center"
-   style="cursor: pointer;"
+   style="cursor: pointer; text-decoration: none;"
    href="https://komidabot.xyz/"
 >{{'APP.DOMAIN_CHANGE' | translate}}</a>
 
@@ -56,6 +56,11 @@
      class="alert alert-info mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-1 mt-md-4">
   Let op. Frans is momenteel geen ondersteunde taal.
 </div>
+
+<a class="d-block p-2 bg-warning text-center"
+   style="cursor: pointer; text-decoration: none;"
+   [href]="'APP.COVID19_INFO_LINK' | translate"
+>{{'APP.COVID19_UNAVAILABLE' | translate}}</a>
 
 <!--<div>{{deviceInfo | json}}</div>-->
 <router-outlet></router-outlet>

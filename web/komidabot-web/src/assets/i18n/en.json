@@ -1,6 +1,8 @@
 {
-  "APP.UPDATE_AVAILABLE": "New version available, click here to refresh.",
+  "APP.COVID19_INFO_LINK": "https://www.uantwerpen.be/en/life-in-antwerp/catering/about-komida/online-ordering/",
+  "APP.COVID19_UNAVAILABLE": "Dear user, online menus are currently unavailable. Click here to go to the information page of the Komida restaurants.",
   "APP.DOMAIN_CHANGE": "The bot has moved to komidabot.xyz, please update your links to this new domain.",
+  "APP.UPDATE_AVAILABLE": "New version available, click here to refresh.",
   "CAMPUS_LIST.ERROR": "Error loading the list of restaurants.",
   "CAMPUS_LIST.LOADING": "Loading...",
   "CAMPUS_LIST.HEADER": "Select a campus",
