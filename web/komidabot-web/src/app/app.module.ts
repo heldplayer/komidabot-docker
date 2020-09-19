@@ -11,7 +11,6 @@ import {ErrorPageComponent} from './error-page/error-page.component';
 import {AppConfigService} from "./app-config.service";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {CampusComponent} from './campus/campus.component';
-import {DeviceDetectorModule} from "ngx-device-detector";
 import {SplashScreenComponent} from './splash-screen/splash-screen.component';
 import {PwaStartComponent} from './pwa-start/pwa-start.component';
 import {CampusListComponent} from './campus-list/campus-list.component';
@@ -63,7 +62,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
-    DeviceDetectorModule.forRoot(),
     TranslateModule.forRoot({
       defaultLanguage: 'nl',
       loader: {
