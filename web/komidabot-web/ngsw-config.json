@@ -61,5 +61,15 @@
         "/api/campus"
       ]
     }
+  ],
+  "navigationUrls": [
+    "/**",
+    "!/**/*.*",
+    "!/**/*__*",
+    "!/**/*__*/**",
+    "!/api/**",
+    "!/api-dev/**",
+    "!/api-secure/**",
+    "!/api-secure-dev/**"
   ]
 }
