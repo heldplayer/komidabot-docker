@@ -7,6 +7,8 @@
   "CAMPUS_LIST.LOADING": "Aan het laden...",
   "CAMPUS_LIST.HEADER": "Selecteer een campus",
   "CAMPUS_LIST.TODAY": "Vandaag",
+  "CLOSING_DATE.NO_END_DATE": "Onbekend",
+  "CLOSING_DATE.UNKNOWN_REASON": "Gesloten",
   "COMING_SOON": "Binnenkort beschikbaar!\u2122",
   "MENU.ERROR": "Fout bij het laden van het menu.",
   "MENU.LOADING": "Aan het laden...",

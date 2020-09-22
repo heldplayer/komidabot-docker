@@ -2,6 +2,7 @@ import * as moment from "moment";
 import {ClosingDay} from "./entities";
 import {formatDate} from "@angular/common";
 import {OperatorFunction, pipe} from "rxjs";
+import {TranslateService} from "@ngx-translate/core";
 
 export function dayToIso(day: moment.Moment): string {
   return day.format('YYYY-MM-DD');
@@ -21,32 +22,36 @@ export function getPreviousWeekDay(day: moment.Moment): moment.Moment {
   return day.clone().subtract(1, 'day');
 }
 
-export function getClosedDisplay(language: string, closedInfo?: ClosingDay | null, showDates = false): string {
+export function getClosedDisplay(translateService: TranslateService, closedInfo?: ClosingDay | null,
+                                 showDates = false): string {
   if (!closedInfo) {
     return '';
   }
 
   let datesInfo = '';
   if (showDates) {
-    const firstDayStr = (closedInfo).first_day;
-    const lastDayStr = (closedInfo).last_day;
+    const firstDayStr = closedInfo.first_day;
+    const lastDayStr = closedInfo.last_day;
 
     if (firstDayStr !== lastDayStr) {
       const firstDay = moment(firstDayStr);
-      const lastDay = moment(lastDayStr);
+      const lastDay = lastDayStr == null ? null : moment(lastDayStr);
 
-      const firstDayFormatted = formatDate(firstDay.toDate(), 'd\xa0MMMM', language);
-      const lastDayFormatted = formatDate(lastDay.toDate(), 'd\xa0MMMM', language);
+      const firstDayFormatted = formatDate(firstDay.toDate(), 'd\xa0MMMM', translateService.currentLang);
 
-      datesInfo = ` (${firstDayFormatted} - ${lastDayFormatted})`;
+      if (lastDay != null) {
+        const lastDayFormatted = formatDate(lastDay.toDate(), 'd\xa0MMMM', translateService.currentLang);
+        datesInfo = ` (${firstDayFormatted} - ${lastDayFormatted})`;
+      } else {
+        const unknownEndStr = translateService.instant('CLOSING_DATE.NO_END_DATE');
+        datesInfo = ` (${firstDayFormatted} - ${unknownEndStr})`;
+      }
+
     }
   }
 
-  if (language == 'nl') {
-    return (closedInfo.reason['nl'] || 'Gesloten') + datesInfo;
-  } else {
-    return (closedInfo.reason['en'] || 'Closed') + datesInfo;
-  }
+  return (closedInfo.reason[translateService.currentLang] || translateService.instant('CLOSING_DATE.UNKNOWN_REASON'))
+    + datesInfo;
 }
 
 export function unsafeCast<T>(): OperatorFunction<any, T> {

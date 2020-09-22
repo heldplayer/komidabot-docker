@@ -138,7 +138,7 @@ export class DaysDisplayComponent {
   }
 
   getDaySubscript(info: DayInfo): string {
-    return getClosedDisplay(this.translate.currentLang, info.closed, false);
+    return getClosedDisplay(this.translate, info.closed, false);
   }
 
   dayForUrl(day: moment.Moment): string {

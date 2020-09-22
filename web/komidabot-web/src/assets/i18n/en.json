@@ -7,6 +7,8 @@
   "CAMPUS_LIST.LOADING": "Loading...",
   "CAMPUS_LIST.HEADER": "Select a campus",
   "CAMPUS_LIST.TODAY": "Today",
+  "CLOSING_DATE.NO_END_DATE": "Unknown",
+  "CLOSING_DATE.UNKNOWN_REASON": "Closed",
   "COMING_SOON": "Available soon!\u2122",
   "MENU.ERROR": "Error loading the menu.",
   "MENU.LOADING": "Loading...",

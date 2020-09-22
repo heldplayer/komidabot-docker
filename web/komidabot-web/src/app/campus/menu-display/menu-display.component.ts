@@ -134,7 +134,7 @@ export class MenuDisplayComponent {
   }
 
   getClosedDisplay(menuInfo: MenuInfo): string {
-    return getClosedDisplay(this.translate.currentLang, menuInfo.closed, true);
+    return getClosedDisplay(this.translate, menuInfo.closed, true);
   }
 
   get isMenuProvisional(): boolean {

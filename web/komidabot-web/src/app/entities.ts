@@ -21,7 +21,7 @@ export interface Campus {
 
 export interface ClosingDay {
   first_day: string;
-  last_day: string;
+  last_day?: string;
   reason: Translation;
 }
 

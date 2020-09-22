@@ -57,7 +57,7 @@ export class CampusListComponent {
 
   getCampusSubscript(campusInfo: CampusInfo): string {
     if (this.isCampusClosed(campusInfo)) {
-      return getClosedDisplay(this.translate.currentLang, campusInfo.closed_info, true);
+      return getClosedDisplay(this.translate, campusInfo.closed_info, true);
     }
     // return 'Open from 11:45 to 13:45';
     // return 'Open from Monday to Friday';
