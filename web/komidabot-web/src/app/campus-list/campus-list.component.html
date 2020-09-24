@@ -1,16 +1,18 @@
-<div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="margin-bottom: 0 !important;">
+<div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="margin-bottom: 0 !important;"
+     role="main">
   <!-- Header -->
   <div class="card-header d-flex align-items-center pr-2">
-    <span class="mr-auto">{{'CAMPUS_LIST.HEADER' | translate}}</span>
-    <span *ngIf="displayTodayButton">{{'CAMPUS_LIST.TODAY' | translate}}</span>
+    <span class="mr-auto" role="heading" aria-level="1">{{'CAMPUS_LIST.HEADER' | translate}}</span>
+    <span *ngIf="displayTodayButton" role="presentation">{{'CAMPUS_LIST.TODAY' | translate}}</span>
   </div>
 
   <!-- Body -->
   <ng-container *ngIf="campusInfo$ | async as campusInfo; else loadingCampuses">
     <ng-container *ngIf="campusInfo.isLoaded; else errorLoading">
-      <div class="list-group list-group-flush">
+      <div class="list-group list-group-flush" role="list">
         <div *ngFor="let campusInfo of campusInfo.response; let even = even; let odd = odd"
-             class="list-group-item d-flex p-0 align-items-center">
+             class="list-group-item d-flex p-0 align-items-center"
+             role="listitem">
           <a [routerLink]="['/campus', campusInfo.campus.short_name]"
              class="campus-item py-2 px-3 flex-grow-1"
              [class.closed]="isCampusClosed(campusInfo)">
@@ -18,7 +20,9 @@
             <span class="card-title d-block m-0">
               <img *ngIf="isCampusClosed(campusInfo)"
                    src="/assets/twemoji/274c.png"
-                   class="emoji"/>
+                   class="emoji"
+                   alt="Closed indicator"
+                   role="none"/>
 
               {{campusInfo.campus.name}}
             </span>
@@ -30,7 +34,8 @@
             <span class="card-title d-block m-2">
               <img *ngIf="isCampusClosed(campusInfo)"
                    src="/assets/twemoji/274c.png"
-                   class="emoji"/>
+                   class="emoji"
+                   role="none"/>
 
               {{campusInfo.campus.name}}
             </span>
@@ -45,8 +50,10 @@
           <a *ngIf="displayTodayButton"
              class="border-left align-self-stretch align-items-center d-flex"
              style="line-height: 100%;"
-             [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]">
-            <img class="mx-3 my-2 flex-shrink-0" style="width: 2em; height: 2em;" src="/assets/twemoji/23e9.png"/>
+             [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]"
+             [attr.aria-label]="'CAMPUS_LIST.GO.DESCRIPTION' | translate:translateInformation(campusInfo)">
+            <img class="mx-3 my-2 flex-shrink-0" style="width: 2em; height: 2em;" src="/assets/twemoji/23e9.png"
+                 role="none"/>
           </a>
         </div>
       </div>

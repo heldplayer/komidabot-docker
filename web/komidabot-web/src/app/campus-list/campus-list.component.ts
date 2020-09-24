@@ -69,6 +69,12 @@ export class CampusListComponent {
     return dayToIso(day);
   }
 
+  translateInformation(campus: CampusInfo): object {
+    return {
+      'campus': campus.campus.name
+    };
+  }
+
   get today(): moment.Moment {
     return moment();
   }

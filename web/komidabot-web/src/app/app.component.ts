@@ -6,6 +6,7 @@ import {Observable, Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {SettingsService} from "./settings.service";
 import {Router} from "@angular/router";
+import {faCog} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-component',
@@ -13,6 +14,8 @@ import {Router} from "@angular/router";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  faCog = faCog;
+
   private unsubscribe$ = new Subject<void>();
 
   deviceInfo: DeviceInfo;

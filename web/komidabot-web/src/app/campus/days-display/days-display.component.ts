@@ -6,6 +6,7 @@ import {distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
 import {ApiResponse, ClosingDay, ClosingDays} from "../../entities";
 import {dayToIso, getClosedDisplay} from "../../utils";
 import {TranslateService} from "@ngx-translate/core";
+import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-days-display',
@@ -13,6 +14,8 @@ import {TranslateService} from "@ngx-translate/core";
   styleUrls: ['./days-display.component.scss']
 })
 export class DaysDisplayComponent {
+  faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
 
   days$: Observable<DayInfo[]>;
   campusName$: Observable<string>;

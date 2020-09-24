@@ -13,4 +13,16 @@ img.emoji {
   vertical-align: -0.1em;
 }
 
-@import '../node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+.btn-navigation {
+  border: 0 none;
+  border-radius: 0;
+  box-shadow: none !important;
+}
+
+.btn-navigation.focus, .btn-navigation:focus {
+  color: $white;
+  background-color: $dark;
+  border-color: $dark;
+}

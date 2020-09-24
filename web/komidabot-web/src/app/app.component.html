@@ -4,11 +4,13 @@
   <ng-container *ngIf="!isOnSettings(); else settingsPage">
     <a class="mr-3 ml-auto d-block text-light text-center"
        style="font-size: 1.5rem; width: 2rem; height: 2rem; line-height: 2rem;"
-       [routerLink]="['/settings']">
-      <i class="fa fa-cog"></i>
+       [routerLink]="['/settings']"
+       [attr.aria-label]="'SETTINGS.COG.DESCRIPTION' | translate">
+      <fa-icon [icon]="faCog"></fa-icon>
     </a>
     <div *ngIf="language$ | async as language" class="btn-group btn-group-toggle">
-      <label class="btn btn-light" [class.active]="language === 'nl'">
+      <label class="btn btn-light" [class.active]="language === 'nl'"
+             lang="nl" aria-label="Nederlands">
         <input type="radio" name="nav-language" value="nl" (click)="setLanguage('nl')" [checked]="language === 'nl'">
         NL
         <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
@@ -23,7 +25,8 @@
       <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
       <!--           src="/assets/twemoji/language-french.png"/>-->
       <!--    </label>-->
-      <label class="btn btn-light" [class.active]="language === 'en'">
+      <label class="btn btn-light" [class.active]="language === 'en'"
+             lang="en" aria-label="English">
         <input type="radio" name="nav-language" value="en" (click)="setLanguage('en')" [checked]="language === 'en'">
         EN
         <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
@@ -44,12 +47,16 @@
    class="d-block p-2 bg-warning text-center"
    style="cursor: pointer;"
    (click)="refreshPage()"
+   role="status"
+   aria-live="polite"
 >{{'APP.UPDATE_AVAILABLE' | translate}}</a>
 
 <a *ngIf="botRedirect"
    class="d-block p-2 bg-warning text-center"
    style="cursor: pointer; text-decoration: none;"
    href="https://komidabot.xyz/"
+   role="status"
+   aria-live="polite"
 >{{'APP.DOMAIN_CHANGE' | translate}}</a>
 
 <div *ngIf="(language$ | async) === 'fr'"

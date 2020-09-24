@@ -1,20 +1,23 @@
-<div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="overflow: hidden;">
+<div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="overflow: hidden;"
+     role="main">
   <!-- Header -->
   <div class="card-header py-2 px-2 d-flex align-items-center border-bottom-0 pb-2"
-       style="height: 2.5rem;">
+       style="height: 2.5rem;" role="navigation">
 
-    <a class="ml-2 ml-md-3 mr-2" [routerLink]="['/']">Start</a>
-    <span>/</span>
+    <a class="ml-2 ml-md-3 mr-2" [routerLink]="['/']"
+       [attr.aria-label]="'NAV.START.DESCRIPTION' | translate">Start</a>
+    <span role="separator">/</span>
     <a *ngIf="campusName$ | async as name"
-       class="ml-2 text-truncate">{{name}}</a>
+       class="ml-2 text-truncate"
+       [attr.aria-label]="'NAV.CAMPUS.DESCRIPTION' | translate:{campus: name}">{{name}}</a>
   </div>
 
   <!-- Sub-header -->
   <div class="card-header p-0 d-flex justify-content-between align-items-center">
     <a [routerLink]="['/campus', campus, 'w', dayForUrl(previousWeek)]"
-       class="btn btn-outline-dark px-3 py-2"
-       style="border: 0 none; border-radius: 0; box-shadow: none;">
-      <i class="fa fa-chevron-left"></i>
+       class="btn btn-outline-dark px-3 py-2 btn-navigation"
+       role="button" tabindex="0" [attr.aria-label]="'WEEK.PREVIOUS_WEEK.LABEL' | translate">
+      <fa-icon [icon]="faChevronLeft"></fa-icon>
     </a>
 
     <div *ngIf="weekDescription as description">
@@ -23,28 +26,31 @@
 
     <a *ngIf="nextWeek !== null; else disabledNextWeek"
        [routerLink]="['/campus', campus, 'w', dayForUrl(nextWeek)]"
-       class="btn btn-outline-dark px-3 py-2"
-       style="border: 0 none; border-radius: 0; box-shadow: none;">
-      <i class="fa fa-chevron-right"></i>
+       class="btn btn-outline-dark px-3 py-2 btn-navigation"
+       role="button" tabindex="0" [attr.aria-label]="'WEEK.NEXT_WEEK.LABEL' | translate">
+      <fa-icon [icon]="faChevronRight"></fa-icon>
     </a>
     <ng-template #disabledNextWeek>
-      <span class="btn btn-outline-dark disabled px-3 py-2"
-            style="border: 0 none; border-radius: 0; box-shadow: none;">
-        <i class="fa fa-chevron-right"></i>
+      <span class="btn btn-outline-dark disabled px-3 py-2 btn-navigation"
+            role="button" tabindex="0" [attr.aria-label]="'WEEK.NEXT_WEEK.LABEL' | translate" aria-disabled="true">
+        <fa-icon [icon]="faChevronRight"></fa-icon>
       </span>
     </ng-template>
   </div>
 
   <!-- Body -->
-  <div class="list-group list-group-flush" *ngIf="days$ | async as days">
+  <div class="list-group list-group-flush" *ngIf="days$ | async as days"
+       role="list">
     <a *ngFor="let info of days"
        [routerLink]="['/campus', campus, 'd', dayForUrl(info.day)]"
        class="list-group-item day-item"
-       [class.closed]="isCampusClosed(info)">
+       [class.closed]="isCampusClosed(info)"
+       role="listitem">
       <span class="card-title d-block m-0">
         <img *ngIf="isCampusClosed(info)"
              src="/assets/twemoji/274c.png"
-             class="emoji"/>
+             class="emoji"
+             role="none"/>
         {{info.day.toDate() | localizedDate : true}}
       </span>
       <span *ngIf="getDaySubscript(info) as subscript"

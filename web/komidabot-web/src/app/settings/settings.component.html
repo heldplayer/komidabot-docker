@@ -1,54 +1,62 @@
-<div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="overflow: hidden;">
+<div class="card mx-2 mx-sm-3 mx-md-4 mx-lg-5 my-3 mt-md-4" style="overflow: hidden;"
+     role="main">
   <!-- Header -->
-  <div class="card-header">
+  <div class="card-header" role="heading">
     {{'SETTINGS.TITLE' | translate}}
   </div>
 
   <div class="card-body container p-3">
-    <div *ngIf="language$ | async as language" class="row mb-2">
-      <div class="col-sm">
-        {{'SETTINGS.LANGUAGE' | translate}}
-      </div>
-      <div class="col-sm text-right">
-        <div class="btn-group btn-group-toggle">
-          <label class="btn btn-secondary" [class.active]="language === 'nl'">
-            <input type="radio" (click)="setLanguage('nl')" [checked]="language === 'nl'">
-            Nederlands
-          </label>
-          <label class="btn btn-secondary" [class.active]="language === 'en'">
-            <input type="radio" (click)="setLanguage('en')" [checked]="language === 'en'">
-            English
-          </label>
+    <fieldset aria-describedby="settings_language_description">
+      <div *ngIf="language$ | async as language" class="row mb-2">
+        <div class="col-sm d-block m-0" style="font-size: inherit;" id="settings_language_description">
+          {{'SETTINGS.LANGUAGE' | translate}}
+        </div>
+        <div class="col-sm text-right">
+          <div class="btn-group btn-group-toggle">
+            <label class="btn btn-secondary" [class.active]="language === 'nl'">
+              <input type="radio" (click)="setLanguage('nl')" [checked]="language === 'nl'">
+              Nederlands
+            </label>
+            <label class="btn btn-secondary" [class.active]="language === 'en'">
+              <input type="radio" (click)="setLanguage('en')" [checked]="language === 'en'">
+              English
+            </label>
+          </div>
         </div>
       </div>
-    </div>
+    </fieldset>
 
-    <div *ngIf="startup$ | async as startup" class="row mb-2">
-      <div class="col-sm">
-        {{'SETTINGS.STARTUP' | translate}}
-      </div>
-      <div class="col-sm text-right">
-        <div class="btn-group btn-group-toggle">
-          <label class="btn btn-secondary" [class.active]="startup.value">
-            <input type="radio" (click)="setStartup(true)" [checked]="startup.value">
-            {{'SETTINGS.STARTUP.MENU' | translate}}
-          </label>
-          <label class="btn btn-secondary" [class.active]="!startup.value">
-            <input type="radio" (click)="setStartup(false)" [checked]="!startup.value">
-            {{'SETTINGS.STARTUP.HOME' | translate}}
-          </label>
+    <fieldset aria-describedby="settings_startup_description">
+      <div *ngIf="startup$ | async as startup" class="row mb-2">
+        <div class="col-sm d-block m-0" style="font-size: inherit;" id="settings_startup_description">
+          {{'SETTINGS.STARTUP' | translate}}
+        </div>
+        <div class="col-sm text-right">
+          <div class="btn-group btn-group-toggle">
+            <label class="btn btn-secondary" [class.active]="startup.value">
+              <input type="radio" (click)="setStartup(true)" [checked]="startup.value">
+              {{'SETTINGS.STARTUP.MENU' | translate}}
+            </label>
+            <label class="btn btn-secondary" [class.active]="!startup.value">
+              <input type="radio" (click)="setStartup(false)" [checked]="!startup.value">
+              {{'SETTINGS.STARTUP.HOME' | translate}}
+            </label>
+          </div>
         </div>
       </div>
-    </div>
+    </fieldset>
 
     <ng-container *ngIf="campuses$ | async as campuses">
       <ng-container *ngFor="let campusInfo$ of campusSettings; let i = index">
         <div *ngIf="campusInfo$ | async as campusInfo" class="row mb-2">
           <div class="col-sm">
-            {{'SETTINGS.CAMPUS_' + i | translate}}
+            <label [attr.for]="'settings_campus_' + i">
+              {{'SETTINGS.CAMPUS_' + i | translate}}
+            </label>
           </div>
           <div class="col-sm text-right">
-            <select class="custom-select" (change)="campusInfo.setValue($event.target)">
+            <select class="custom-select" (change)="campusInfo.setValue($event.target)"
+                    [id]="'settings_campus_' + i">
               <option value="null"
                       [selected]="campusInfo.campus === null">
                 {{'SETTINGS.NO_CAMPUS' | translate}}

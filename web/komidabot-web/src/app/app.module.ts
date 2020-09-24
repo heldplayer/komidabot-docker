@@ -28,6 +28,7 @@ import {LocalizedDatePipe} from './localized-date.pipe';
 import {ImageListComponent} from './image-list/image-list.component';
 import {SettingsComponent} from './settings/settings.component';
 import {MenuOverviewComponent} from './menu-overview/menu-overview.component';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 
 registerLocaleData(localeEn, 'en');
@@ -70,6 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
+    FontAwesomeModule,
   ],
   providers: [
     // FacebookMessengerService,

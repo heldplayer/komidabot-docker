@@ -6,6 +6,7 @@ import {CampusService} from "../../campus.service";
 import * as moment from "moment";
 import {dayToIso, getClosedDisplay, getNextWeekDay, getPreviousWeekDay} from "../../utils";
 import {TranslateService} from "@ngx-translate/core";
+import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-menu-display',
@@ -13,6 +14,8 @@ import {TranslateService} from "@ngx-translate/core";
   styleUrls: ['./menu-display.component.scss']
 })
 export class MenuDisplayComponent {
+  faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
 
   menuInfo$: Observable<ApiResponse<MenuInfo>>;
   campusName$: Observable<string>;
@@ -114,6 +117,10 @@ export class MenuDisplayComponent {
     return `/assets/twemoji/${courseIcons[<CourseType>item.course_type][<CourseSubType>item.course_sub_type]}.png`;
   }
 
+  getIconDescription(item: MenuItem): string {
+    return `COURSE_ICON.DESCRIPTION.${item.course_type}.${item.course_sub_type}`
+  }
+
   getTranslation(item: MenuItem): string {
     if (this.translate.currentLang == 'nl') {
       return item.translation['nl'] || 'Missing translation';
@@ -130,6 +137,17 @@ export class MenuDisplayComponent {
       return `(${item.price_students})`;
     } else {
       return '';
+    }
+  }
+
+  getPriceDescription(item: MenuItem): string {
+    if (item.price_students) {
+      if (item.price_staff) {
+        return 'COURSE.PRICE.DESCRIPTION.STUDENTS_AND_STAFF';
+      }
+      return 'COURSE.PRICE.DESCRIPTION.STUDENTS_ONLY';
+    } else {
+      return 'COURSE.PRICE.DESCRIPTION.NONE';
     }
   }
 

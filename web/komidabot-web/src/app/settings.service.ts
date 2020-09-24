@@ -17,7 +17,10 @@ export class SettingsService implements OnDestroy {
 
     this.language$
       .pipe(
-        tap(value => console.log('Language:', value)),
+        tap(value => {
+          console.log('Language:', value);
+          document.documentElement.setAttribute('lang', value);
+        }),
         takeUntil(this.unsubscribe$),
       )
       .subscribe(language => this.translate.use(language));
