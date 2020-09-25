@@ -26,3 +26,13 @@ img.emoji {
   background-color: $dark;
   border-color: $dark;
 }
+
+.highlightable-inside {
+  outline: 0 none;
+}
+
+.highlightable-inside:focus {
+  outline: 2px solid black;
+  outline-offset: -2px;
+  outline-color: -webkit-focus-ring-color;
+}

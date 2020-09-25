@@ -8,31 +8,18 @@
        [attr.aria-label]="'SETTINGS.COG.DESCRIPTION' | translate">
       <fa-icon [icon]="faCog"></fa-icon>
     </a>
-    <div *ngIf="language$ | async as language" class="btn-group btn-group-toggle">
+    <div *ngIf="language$ | async as language" class="btn-group btn-group-toggle" role="group">
       <label class="btn btn-light" [class.active]="language === 'nl'"
-             lang="nl" aria-label="Nederlands">
-        <input type="radio" name="nav-language" value="nl" (click)="setLanguage('nl')" [checked]="language === 'nl'">
+             (click)="setLanguage('nl')"
+             tabindex="0" lang="nl" aria-label="Nederlands"
+             role="radio" [attr.aria-checked]="language === 'nl'">
         NL
-        <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-        <!--           src="/assets/twemoji/1f1f3-1f1f1.png"/>-->
-        <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-        <!--           src="/assets/twemoji/language-dutch.png"/>-->
       </label>
-      <!--    <label class="btn btn-light" [class.active]="language === 'fr'">-->
-      <!--      <input type="radio" name="language" value="en" (click)="setLanguage('fr')" [checked]="language === 'fr'">-->
-      <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-      <!--           src="/assets/twemoji/1f1eb-1f1f7.png"/>-->
-      <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-      <!--           src="/assets/twemoji/language-french.png"/>-->
-      <!--    </label>-->
       <label class="btn btn-light" [class.active]="language === 'en'"
-             lang="en" aria-label="English">
-        <input type="radio" name="nav-language" value="en" (click)="setLanguage('en')" [checked]="language === 'en'">
+             (click)="setLanguage('en')"
+             tabindex="0" lang="en" aria-label="English"
+             role="radio" [attr.aria-checked]="language === 'en'">
         EN
-        <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-        <!--           src="/assets/twemoji/1f1ec-1f1e7.png"/>-->
-        <!--      <img class="m0" style="width: 2em; height: 2em; margin: -.25em;"-->
-        <!--           src="/assets/twemoji/language-english.png"/>-->
       </label>
     </div>
   </ng-container>
@@ -48,6 +35,7 @@
    style="cursor: pointer;"
    (click)="refreshPage()"
    role="status"
+   [attr.aria-label]="'APP.UPDATE_AVAILABLE.DESCRIPTION' | translate"
    aria-live="polite"
 >{{'APP.UPDATE_AVAILABLE' | translate}}</a>
 

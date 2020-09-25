@@ -132,9 +132,9 @@ export class MenuDisplayComponent {
   getPriceDisplay(item: MenuItem): string {
     if (item.price_students) {
       if (item.price_staff) {
-        return `(${item.price_students}\xa0/\xa0${item.price_staff})`;
+        return `${item.price_students}\xa0/\xa0${item.price_staff}`;
       }
-      return `(${item.price_students})`;
+      return `${item.price_students}`;
     } else {
       return '';
     }

@@ -2,11 +2,12 @@
      role="main">
   <!-- Header -->
   <div class="card-header py-2 px-2 d-flex align-items-center border-bottom-0 pb-2"
-       style="height: 2.5rem;" role="navigation">
+       style="height: 2.5rem;"
+       role="navigation" aria-owns="navigation_previous navigation_title navigation_next">
 
     <a class="ml-2 ml-md-3 mr-2" [routerLink]="['/']"
        [attr.aria-label]="'NAV.START.DESCRIPTION' | translate">Start</a>
-    <span role="separator">/</span>
+    <span role="separator" aria-hidden="true">/</span>
     <a *ngIf="campusName$ | async as name"
        class="ml-2 text-truncate"
        [attr.aria-label]="'NAV.CAMPUS.DESCRIPTION' | translate:{campus: name}">{{name}}</a>
@@ -16,45 +17,51 @@
   <div class="card-header p-0 d-flex justify-content-between align-items-center">
     <a [routerLink]="['/campus', campus, 'w', dayForUrl(previousWeek)]"
        class="btn btn-outline-dark px-3 py-2 btn-navigation"
-       role="button" tabindex="0" [attr.aria-label]="'WEEK.PREVIOUS_WEEK.LABEL' | translate">
+       role="button" tabindex="0" [attr.aria-label]="'WEEK.PREVIOUS_WEEK.LABEL' | translate"
+       id="navigation_previous">
       <fa-icon [icon]="faChevronLeft"></fa-icon>
     </a>
 
-    <div *ngIf="weekDescription as description">
+    <div *ngIf="weekDescription as description"
+         id="navigation_title">
       {{description | translate}}
     </div>
 
     <a *ngIf="nextWeek !== null; else disabledNextWeek"
        [routerLink]="['/campus', campus, 'w', dayForUrl(nextWeek)]"
        class="btn btn-outline-dark px-3 py-2 btn-navigation"
-       role="button" tabindex="0" [attr.aria-label]="'WEEK.NEXT_WEEK.LABEL' | translate">
+       role="button" tabindex="0" [attr.aria-label]="'WEEK.NEXT_WEEK.LABEL' | translate"
+       id="navigation_next">
       <fa-icon [icon]="faChevronRight"></fa-icon>
     </a>
     <ng-template #disabledNextWeek>
       <span class="btn btn-outline-dark disabled px-3 py-2 btn-navigation"
-            role="button" tabindex="0" [attr.aria-label]="'WEEK.NEXT_WEEK.LABEL' | translate" aria-disabled="true">
+            role="button" tabindex="0" [attr.aria-label]="'WEEK.NEXT_WEEK.LABEL' | translate" aria-disabled="true"
+            id="navigation_next">
         <fa-icon [icon]="faChevronRight"></fa-icon>
       </span>
     </ng-template>
   </div>
 
   <!-- Body -->
-  <div class="list-group list-group-flush" *ngIf="days$ | async as days"
-       role="list">
+  <div class="list-group list-group-flush" *ngIf="days$ | async as days">
     <a *ngFor="let info of days"
        [routerLink]="['/campus', campus, 'd', dayForUrl(info.day)]"
-       class="list-group-item day-item"
-       [class.closed]="isCampusClosed(info)"
-       role="listitem">
+       class="list-group-item day-item highlightable-inside"
+       [class.closed]="isCampusClosed(info)">
       <span class="card-title d-block m-0">
         <img *ngIf="isCampusClosed(info)"
              src="/assets/twemoji/274c.png"
              class="emoji"
-             role="none"/>
+             aria-hidden="true" role="none"/>
+        <span *ngIf="isCampusClosed(info)"
+              [attr.aria-label]="'CAMPUS.CLOSED.DESCRIPTION' | translate"></span>
         {{info.day.toDate() | localizedDate : true}}
       </span>
-      <span *ngIf="getDaySubscript(info) as subscript"
-            class="card-subtitle d-block m-0 day-subtitle">{{subscript}}</span>
+      <ng-container *ngIf="getDaySubscript(info) as subscript">
+        <span aria-label="."></span>
+        <span class="card-subtitle d-block m-0 day-subtitle">{{subscript}}</span>
+      </ng-container>
     </a>
   </div>
 </div>

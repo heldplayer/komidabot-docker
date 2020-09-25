@@ -3,7 +3,7 @@
   <!-- Header -->
   <div class="card-header d-flex align-items-center pr-2">
     <span class="mr-auto" role="heading" aria-level="1">{{'CAMPUS_LIST.HEADER' | translate}}</span>
-    <span *ngIf="displayTodayButton" role="presentation">{{'CAMPUS_LIST.TODAY' | translate}}</span>
+    <span *ngIf="displayTodayButton" role="none" aria-hidden="true">{{'CAMPUS_LIST.TODAY' | translate}}</span>
   </div>
 
   <!-- Body -->
@@ -17,18 +17,20 @@
              class="campus-item py-2 px-3 flex-grow-1"
              [class.closed]="isCampusClosed(campusInfo)">
             <ng-container *ngIf="getCampusSubscript(campusInfo) as subscript; else noSubscript">
-            <span class="card-title d-block m-0">
-              <img *ngIf="isCampusClosed(campusInfo)"
-                   src="/assets/twemoji/274c.png"
-                   class="emoji"
-                   alt="Closed indicator"
-                   role="none"/>
+              <span class="card-title d-block m-0">
+                <img *ngIf="isCampusClosed(campusInfo)"
+                     src="/assets/twemoji/274c.png"
+                     class="emoji"
+                     aria-hidden="true" role="none"/>
+                <span *ngIf="isCampusClosed(campusInfo)"
+                      [attr.aria-label]="'CAMPUS.CLOSED.DESCRIPTION' | translate"></span>
 
-              {{campusInfo.campus.name}}
-            </span>
+                {{campusInfo.campus.name}}
+              </span>
+              <span aria-label="."></span>
               <span class="card-subtitle d-block m-0 campus-subtitle">
               {{subscript}}
-            </span>
+              </span>
             </ng-container>
             <ng-template #noSubscript>
             <span class="card-title d-block m-2">
