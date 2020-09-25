@@ -49,7 +49,7 @@
     <ng-container *ngIf="menuInfo.isLoaded; else errorLoading">
       <div *ngIf="getClosedDisplay(menuInfo.response) as closedText; else notClosed"
            class="card-body highlightable-inside"
-           role="status" tabindex="0">
+           role="status" tabindex="-1">
         {{closedText}}
       </div>
 
@@ -87,7 +87,7 @@
 
       <ng-template #noMenuItems>
         <div class="card-body highlightable-inside"
-             role="status" tabindex="0">
+             role="status" tabindex="-1">
           {{'MENU.EMPTY' | translate}}
         </div>
       </ng-template>
@@ -96,7 +96,7 @@
     <ng-template #errorLoading>
       <ng-container *ngIf="menuInfo.isErrored; else loadingMenu">
         <div class="card-body highlightable-inside"
-             role="status" tabindex="0">
+             role="status" tabindex="-1">
           {{'MENU.ERROR' | translate}}
         </div>
       </ng-container>

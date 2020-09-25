@@ -9,38 +9,39 @@
   <!-- Body -->
   <ng-container *ngIf="campusInfo$ | async as campusInfo; else loadingCampuses">
     <ng-container *ngIf="campusInfo.isLoaded; else errorLoading">
-      <div class="list-group list-group-flush" role="list">
+      <div class="list-group list-group-flush">
         <div *ngFor="let campusInfo of campusInfo.response; let even = even; let odd = odd"
-             class="list-group-item d-flex p-0 align-items-center"
-             role="listitem">
+             class="list-group-item d-flex p-0 align-items-center">
           <a [routerLink]="['/campus', campusInfo.campus.short_name]"
-             class="campus-item py-2 px-3 flex-grow-1"
+             class="campus-item py-2 px-3 flex-grow-1 highlightable-inside"
              [class.closed]="isCampusClosed(campusInfo)">
             <ng-container *ngIf="getCampusSubscript(campusInfo) as subscript; else noSubscript">
-              <span class="card-title d-block m-0">
-                <img *ngIf="isCampusClosed(campusInfo)"
-                     src="/assets/twemoji/274c.png"
-                     class="emoji"
-                     aria-hidden="true" role="none"/>
-                <span *ngIf="isCampusClosed(campusInfo)"
-                      [attr.aria-label]="'CAMPUS.CLOSED.DESCRIPTION' | translate"></span>
+              <span role="text">
+                <span class="card-title d-block m-0">
+                  <img *ngIf="isCampusClosed(campusInfo)"
+                       src="/assets/twemoji/274c.png"
+                       class="emoji"
+                       aria-hidden="true" role="none"/>
+                  <span *ngIf="isCampusClosed(campusInfo)"
+                        [attr.aria-label]="'CAMPUS.CLOSED.DESCRIPTION' | translate"></span>
 
-                {{campusInfo.campus.name}}
-              </span>
-              <span aria-label="."></span>
-              <span class="card-subtitle d-block m-0 campus-subtitle">
-              {{subscript}}
+                  {{campusInfo.campus.name}}
+                </span>
+                <span aria-label="."></span>
+                <span class="card-subtitle d-block m-0 campus-subtitle">
+                {{subscript}}
+                </span>
               </span>
             </ng-container>
             <ng-template #noSubscript>
-            <span class="card-title d-block m-2">
-              <img *ngIf="isCampusClosed(campusInfo)"
-                   src="/assets/twemoji/274c.png"
-                   class="emoji"
-                   role="none"/>
+              <span class="card-title d-block m-2" role="text">
+                <img *ngIf="isCampusClosed(campusInfo)"
+                     src="/assets/twemoji/274c.png"
+                     class="emoji"
+                     role="none"/>
 
-              {{campusInfo.campus.name}}
-            </span>
+                {{campusInfo.campus.name}}
+              </span>
             </ng-template>
           </a>
           <!--          <a *ngIf="!isCampusClosed(campusInfo)"-->
@@ -50,7 +51,7 @@
           <!--            <span class="py-2 px-3">{{'CAMPUS_LIST.TODAY' | translate}}</span>-->
           <!--          </a>-->
           <a *ngIf="displayTodayButton"
-             class="border-left align-self-stretch align-items-center d-flex"
+             class="border-left align-self-stretch align-items-center d-flex highlightable-inside"
              style="line-height: 100%;"
              [routerLink]="['/campus', campusInfo.campus.short_name, 'd', dayForUrl(today)]"
              [attr.aria-label]="'CAMPUS_LIST.GO.DESCRIPTION' | translate:translateInformation(campusInfo)">
@@ -63,7 +64,10 @@
 
     <ng-template #errorLoading>
       <ng-container *ngIf="campusInfo.isErrored; else loadingCampuses">
-        <div class="card-body">{{'CAMPUS_LIST.ERROR' | translate}}</div>
+        <div class="card-body highlightable-inside"
+             role="status" tabindex="-1">
+          {{'CAMPUS_LIST.ERROR' | translate}}
+        </div>
       </ng-container>
     </ng-template>
   </ng-container>

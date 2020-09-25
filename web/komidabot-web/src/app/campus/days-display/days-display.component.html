@@ -49,19 +49,21 @@
        [routerLink]="['/campus', campus, 'd', dayForUrl(info.day)]"
        class="list-group-item day-item highlightable-inside"
        [class.closed]="isCampusClosed(info)">
-      <span class="card-title d-block m-0">
-        <img *ngIf="isCampusClosed(info)"
-             src="/assets/twemoji/274c.png"
-             class="emoji"
-             aria-hidden="true" role="none"/>
-        <span *ngIf="isCampusClosed(info)"
-              [attr.aria-label]="'CAMPUS.CLOSED.DESCRIPTION' | translate"></span>
-        {{info.day.toDate() | localizedDate : true}}
+      <span role="text">
+        <span class="card-title d-block m-0">
+          <img *ngIf="isCampusClosed(info)"
+               src="/assets/twemoji/274c.png"
+               class="emoji"
+               aria-hidden="true" role="none"/>
+          <span *ngIf="isCampusClosed(info)"
+                [attr.aria-label]="'CAMPUS.CLOSED.DESCRIPTION' | translate"></span>
+          {{info.day.toDate() | localizedDate : true}}
+        </span>
+        <ng-container *ngIf="getDaySubscript(info) as subscript">
+          <span aria-label="."></span>
+          <span class="card-subtitle d-block m-0 day-subtitle">{{subscript}}</span>
+        </ng-container>
       </span>
-      <ng-container *ngIf="getDaySubscript(info) as subscript">
-        <span aria-label="."></span>
-        <span class="card-subtitle d-block m-0 day-subtitle">{{subscript}}</span>
-      </ng-container>
     </a>
   </div>
 </div>
