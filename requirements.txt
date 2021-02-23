@@ -4,7 +4,7 @@ Flask-Login==0.5.0
 Flask-Migrate==2.5.3
 Flask-Session==0.3.2
 Flask-SQLAlchemy==2.4.4
-Flask-Testing==0.8.0
+Flask-Testing==0.8.1
 gunicorn==20.0.4
 jsonschema==3.2.0
 psycopg2-binary==2.8.6
@@ -14,7 +14,7 @@ googletrans==3.0.0
 cachetools==4.1.1
 APScheduler==3.6.3
 httpretty==1.0.3
-cryptography==3.2.1
+cryptography==3.4.6
 pywebpush==1.11.0
 py-vapid==1.7.1
 Werkzeug==1.0.1
