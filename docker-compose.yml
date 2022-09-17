@@ -26,7 +26,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: komidabot_prod
       APP_SETTINGS: config.ProductionConfig
-      FLASK_ENV: production
     volumes:
       - prod_sessions:/var/flask_session
     env_file:
@@ -47,7 +46,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: komidabot_dev
       APP_SETTINGS: config.DevelopmentConfig
-      FLASK_ENV: development
+      FLASK_DEBUG: 1
     volumes:
       - .:/usr/src/app
       - dev_sessions:/var/flask_session

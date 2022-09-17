@@ -136,7 +136,7 @@ def test(case: Optional[str]):
     result = ColourTextTestRunner(verbosity=2).run(tests)
     if result.wasSuccessful():
         return 0
-    # This makes Flash return an exit code of 1, otherwise it defaults to 0 even if returning 0
+    # This makes Flask return an exit code of 1, otherwise it defaults to 0 even if returning 0
     raise click.exceptions.Exit(1)
 
 

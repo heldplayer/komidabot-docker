@@ -11,7 +11,7 @@ def get_app() -> 'App':
 
 class App:
     def __init__(self, config):
-        import atexit
+        import atexit, sys
         from concurrent.futures import ThreadPoolExecutor as PyThreadPoolExecutor
 
         from komidabot.facebook.api_interface import ApiInterface
@@ -53,6 +53,8 @@ class App:
             self.user_manager.initialise()
 
         if not config['TESTING']:
+            self.bot.start_scheduler()
+
             with self.app_context():
                 from komidabot.models import AppSettings
                 AppSettings.create_entries()

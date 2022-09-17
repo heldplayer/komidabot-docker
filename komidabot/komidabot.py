@@ -33,9 +33,6 @@ class Komidabot(Bot):
 
         self._handling_error = False
 
-        self.scheduler.start()
-        atexit.register(BackgroundScheduler.shutdown, self.scheduler)  # Ensure cleanup of resources
-
         # Scheduled jobs should work with DST
 
         @self.scheduler.scheduled_job(CronTrigger(day_of_week='mon-fri', hour=10, minute=0, second=0),
@@ -73,6 +70,10 @@ class Komidabot(Bot):
                     bot.notify_error(e)
 
                     get_app().logger.exception(e)
+
+    def start_scheduler(self):
+        self.scheduler.start()
+        atexit.register(BackgroundScheduler.shutdown, self.scheduler)  # Ensure cleanup of resources
 
     def trigger_received(self, trigger: triggers.Trigger):
         with self.lock:  # TODO: Maybe only lock on critical sections?

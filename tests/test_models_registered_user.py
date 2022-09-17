@@ -298,12 +298,10 @@ class TestModelsRegisteredUsers(BaseTestCase):
 
             self.assertIsNone(user1.activated_on)
             self.assertFalse(user1.is_active)
-            self.assertTrue(user1.is_authenticated)
             self.assertFalse(user1.is_anonymous)
 
             self.assertIsNotNone(user2.activated_on)
             self.assertTrue(user2.is_active)
-            self.assertTrue(user2.is_authenticated)
             self.assertFalse(user2.is_anonymous)
 
     def test_subscriptions(self):

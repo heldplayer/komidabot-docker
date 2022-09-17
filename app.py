@@ -11,7 +11,7 @@ from komidabot.app import App as KomidabotApp
 from komidabot.features import update_active_features
 
 
-def create_app(script_info: ScriptInfo = None):
+def create_app(*, app_settings: str = None):
     locale.setlocale(locale.LC_MONETARY, 'nl_BE.utf8')
 
     # instantiate the app
@@ -19,9 +19,8 @@ def create_app(script_info: ScriptInfo = None):
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
     # set config
-    app_settings = os.getenv('APP_SETTINGS')
-    if script_info is not None and 'APP_SETTINGS' in script_info.data:
-        app_settings = script_info.data['APP_SETTINGS']
+    if app_settings is None:
+        app_settings = os.getenv('APP_SETTINGS')
     app.config.from_object(app_settings)
 
     # print("The script config is", script_info, flush=True)

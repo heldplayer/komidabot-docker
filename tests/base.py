@@ -1,6 +1,6 @@
 import datetime
 from decimal import Decimal
-from functools import wraps
+from functools import partial, wraps
 from typing import Dict, List, NamedTuple, Tuple
 
 import httpretty
@@ -55,8 +55,7 @@ class BaseTestCase(TestCase):
         self.app: App = None
 
     def create_app(self):
-        script_info = ScriptInfo(create_app=create_app)
-        script_info.data['APP_SETTINGS'] = 'config.TestingConfig'
+        script_info = ScriptInfo(create_app=partial(create_app, app_settings='config.TestingConfig'))
         return script_info.load_app()
 
     def setUp(self):
