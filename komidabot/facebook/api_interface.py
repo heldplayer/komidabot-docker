@@ -29,6 +29,9 @@ class ApiInterface:
         self.locale_parameters['access_token'] = page_access_token
         self.locale_parameters['fields'] = 'locale'
 
+        self.locale_cache = TTLCache(maxsize=64, ttl=300)
+        self.locale_lock = threading.Lock()
+
     @check_exceptions(messages.MessageSendResult.ERROR)  # Handles exceptions raised in this method
     def post_send_api(self, data: dict) -> messages.MessageSendResult:
         response = self.session.post(BASE_ENDPOINT + API_VERSION + SEND_API, params=self.base_parameters,
@@ -112,7 +115,7 @@ class ApiInterface:
         return response.status_code == 200
 
     @check_exceptions()  # TODO: Exception checking needs to be done differently
-    @cachedmethod(TTLCache(maxsize=64, ttl=300), lock=threading.Lock())
+    @cachedmethod(lambda self: self.locale_cache, lock=lambda self: self.locale_lock)
     def lookup_locale(self, user_id: str) -> str:
         # TODO: Futures or Promises???
 
