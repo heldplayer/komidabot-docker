@@ -2,7 +2,7 @@ import json
 import threading
 
 import requests
-from cachetools import cached, TTLCache
+from cachetools import cachedmethod, TTLCache
 
 import komidabot.messages as messages
 from komidabot.app import get_app
@@ -112,8 +112,8 @@ class ApiInterface:
         return response.status_code == 200
 
     @check_exceptions()  # TODO: Exception checking needs to be done differently
-    @cached(cache=TTLCache(maxsize=64, ttl=300), lock=threading.Lock())
-    def lookup_locale(self, user_id):
+    @cachedmethod(TTLCache(maxsize=64, ttl=300), lock=threading.Lock())
+    def lookup_locale(self, user_id: str) -> str:
         # TODO: Futures or Promises???
 
         response = self.session.get(BASE_ENDPOINT + API_VERSION + user_id, params=self.locale_parameters)
