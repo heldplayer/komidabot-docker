@@ -24,7 +24,7 @@ SQLAlchemy==1.4.41
 sqlalchemy2-stubs==0.0.2a27
 colour-runner==0.1.1
 oauthlib==3.2.1
-PyYAML==5.4.1
+PyYAML==6.0
 
 Jinja2==3.0.3
 itsdangerous==2.0.1
