@@ -129,6 +129,13 @@ def upload_learning_data():
 @click.option('--case')
 def test(case: Optional[str]):
     """Runs the tests without code coverage"""
+
+    import warnings
+    from sqlalchemy import exc
+
+    os.environ.setdefault('SQLALCHEMY_WARN_20', '1')
+    warnings.filterwarnings("always", category=exc.RemovedIn20Warning)
+
     if case:
         tests = unittest.TestLoader().loadTestsFromName('tests.' + case)
     else:

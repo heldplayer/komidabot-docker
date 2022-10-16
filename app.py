@@ -27,6 +27,9 @@ def create_app(*, app_settings: str = None):
     # print(" - Data: ", script_info.data, flush=True)
     # print("The database URI is", app.config.get('SQLALCHEMY_DATABASE_URI'), flush=True)
 
+    if app.config['VERBOSE']:
+        os.environ.setdefault('SQLALCHEMY_WARN_20', '1')
+
     # set up extensions
     session.init_app(app)
     db.init_app(app)
