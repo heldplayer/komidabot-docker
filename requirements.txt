@@ -1,4 +1,4 @@
-wheel==0.37.1
+wheel==0.38.1
 setuptools==65.3.0
 Flask==2.2.2
 Flask-Login==0.6.2
