@@ -18,7 +18,7 @@ httpretty==1.1.4
 cryptography==38.0.1
 pywebpush==1.14.0
 py-vapid==1.8.2
-Werkzeug==2.2.2
+Werkzeug==2.2.3
 boto3==1.17.*
 SQLAlchemy==1.4.41
 sqlalchemy2-stubs==0.0.2a27
