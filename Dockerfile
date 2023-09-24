@@ -8,7 +8,7 @@ RUN set -eu ; \
     apt-get -qq update ; \
     apt-get -y -qq upgrade ; \
     apt-get -y -qq install netcat-openbsd bash ; \
-    apt-get -y -qq install gcc python-dev build-essential ; \
+    apt-get -y -qq install gcc build-essential ; \
 #    apt-get -y -qq install postgresql-dev ; \
     apt-get -y -qq install libxml2 libxml2-dev libxslt1.1 libxslt1-dev libjpeg-dev poppler-utils ; \
     apt-get -y -qq install locales-all
@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # get some space back
 #RUN apk del build-deps
 RUN set -eu ; \
-    apt-get -y -qq autoremove gcc python-dev build-essential ; \
+    apt-get -y -qq autoremove gcc build-essential ; \
     apt-get clean
 
 # add entrypoint.sh
